@@ -1,9 +1,12 @@
 import type { KeyboardEvent, ReactNode } from 'react';
+import { Icon, type IconName } from '../Icon/Icon';
 import { Panel, Tab, TabList } from './Tabs.styles';
 
 export interface TabItem<T extends string> {
   id: T;
   label: string;
+  /** Optional icon shown before the label (decorative). */
+  icon?: IconName;
 }
 
 interface TabsProps<T extends string> {
@@ -48,6 +51,7 @@ export function Tabs<T extends string>({ tabs, activeId, onChange, label, idPref
             $active={active}
             onClick={() => onChange(tab.id)}
           >
+            {tab.icon && <Icon name={tab.icon} />}
             {tab.label}
           </Tab>
         );

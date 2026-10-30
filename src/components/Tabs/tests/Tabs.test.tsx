@@ -4,8 +4,8 @@ import { useState } from 'react';
 import { TabPanel, Tabs } from '../Tabs';
 
 const TABS = [
-  { id: 'summary', label: 'Summary' },
-  { id: 'trends', label: 'Trends' },
+  { id: 'summary', label: 'Summary', icon: 'pie-chart' },
+  { id: 'trends', label: 'Trends', icon: 'bar-chart' },
   { id: 'budgets', label: 'Budgets' },
 ] as const;
 
@@ -31,6 +31,16 @@ describe('Tabs', () => {
     expect(screen.getByRole('tab', { name: 'Summary' })).toHaveAttribute('aria-selected', 'true');
     expect(screen.getByRole('tabpanel', { name: 'Summary' })).toHaveTextContent('Summary content');
     expect(screen.queryByRole('tabpanel', { name: 'Trends' })).not.toBeInTheDocument();
+  });
+
+  it('shows an icon before the label without changing the accessible name', () => {
+    render(<Harness />);
+    const summary = screen.getByRole('tab', { name: 'Summary' });
+    const icon = summary.querySelector('svg')!;
+    expect(icon).toHaveAttribute('data-icon', 'pie-chart');
+    expect(icon).toHaveAttribute('aria-hidden', 'true');
+    expect(summary.firstElementChild).toBe(icon);
+    expect(screen.getByRole('tab', { name: 'Budgets' }).querySelector('svg')).toBeNull();
   });
 
   it('switches tab on click and keeps other panels mounted', async () => {

@@ -17,14 +17,20 @@ describe('Header', () => {
     expect(screen.getByRole('img', { name: 'Capitec home' })).toHaveAttribute('src', expect.stringContaining('capitec-logo'));
   });
 
-  it('shows the navigation and greets the customer by first name', () => {
+  it('shows the navigation and greets the customer by first name, with a profile icon', () => {
     renderHeader({ customerName: 'John Doe' });
     expect(screen.getByRole('navigation', { name: 'Main' })).toBeInTheDocument();
-    expect(screen.getByText('Hi, John')).toBeInTheDocument();
+    const greeting = screen.getByText('Hi, John');
+    const icon = screen.getByTestId('profile-icon');
+    expect(greeting).toContainElement(icon);
+    // Decorative: screen readers only hear "Hi, John".
+    expect(icon).toHaveAttribute('aria-hidden', 'true');
+    expect(greeting.firstElementChild).toBe(icon);
   });
 
-  it('omits the greeting until the customer is known', () => {
+  it('omits the greeting and icon until the customer is known', () => {
     renderHeader();
     expect(screen.queryByText(/^Hi,/)).not.toBeInTheDocument();
+    expect(screen.queryByTestId('profile-icon')).not.toBeInTheDocument();
   });
 });

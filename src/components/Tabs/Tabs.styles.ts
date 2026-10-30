@@ -12,24 +12,30 @@ export const TabList = styled.div`
   }
 `;
 
+/** Plain white chips: the active tab and a hovered tab are shown by blue text only. */
 export const Tab = styled.button<{ $active: boolean }>`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   flex-shrink: 0;
-  padding: 7px ${space.md};
-  border: 1px solid ${({ $active }) => ($active ? colors.primaryButtonBackground : 'transparent')};
+  padding: 7px ${space.sm};
+  border: 0;
   border-radius: ${radii.sm};
-  background: ${({ $active }) => ($active ? colors.primaryButtonBackground : colors.background)};
-  color: ${({ $active }) => ($active ? colors.onPrimary : colors.text)};
+  background: ${colors.background};
+  color: ${({ $active }) => ($active ? colors.linkText : colors.text)};
   font-size: ${fontSizes.md};
   font-weight: ${fontWeights.semibold};
   white-space: nowrap;
   cursor: pointer;
-  transition:
-    background 0.15s ease,
-    border-color 0.15s ease;
+  transition: color 0.15s ease;
 
   &:hover {
-    border-color: ${colors.primaryButtonBackground};
-    background: ${({ $active }) => ($active ? colors.buttonHoverBackground : colors.background)};
+    color: ${colors.linkText};
+  }
+
+  ${media.tablet} {
+    gap: ${space.xs};
+    padding: 7px ${space.md};
   }
 `;
 

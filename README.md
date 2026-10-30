@@ -5,7 +5,7 @@ A responsive React + TypeScript app covering both frontend briefs as two separat
 | Page | URL | Tabs |
 | --- | --- | --- |
 | **Spending Insights** | `/spending-insights` | **Overview** (KPI tiles, spending by category as a Chart.js doughnut, and monthly budget progress shown only with the *This month* filter; picking a category opens its transactions) · **Trends** (Chart.js bar, 6/12/24 months) · **Transactions** (filter, sort, paginate) |
-| **Loan Estimator** | `/loan-estimator` | **Eligibility** (validated form → decision, likelihood, recommended loan, affordability, repayment schedule) · **Repayment calculator** (any amount, term and credit score) · **Loan products** (product details, with a "Check eligibility" shortcut) |
+| **Loan Estimator** | `/loan-estimator` | **Loan products** (opens first: product details, with a "Check eligibility" shortcut) · **Eligibility** (validated form → decision, likelihood, recommended loan, affordability, repayment schedule) · **Repayment calculator** (any amount, term and credit score) |
 
 - `/` redirects to Spending Insights, and unknown URLs show a "page not found" page.
 - The active tab is kept in the URL (`?tab=transactions`), so tabs survive a refresh, can be bookmarked or shared, and work with the back button.
@@ -78,7 +78,7 @@ src/
 │   ├── tokens.ts                 Design tokens (colours, type, spacing, radii, breakpoints)
 │   └── GlobalStyle.styles.ts     Global CSS (styled-components)
 ├── assets/capitec-logo.png       Header logo (cropped to the logo strip in Header.styles.ts)
-├── components/                   Shared UI: Button, Card, Header, MainNav, PageShell, Tabs (+ TabPanel),
+├── components/                   Shared UI: Button, Card, Header, Icon, MainNav, PageShell, Tabs (+ TabPanel),
 │                                 FormField, SegmentedControl, ProgressBar, StatusMessage, CategoryIcon
 ├── features/
 │   ├── spending/                 SummaryTiles, DateRangeFilter, CategoryBreakdown,

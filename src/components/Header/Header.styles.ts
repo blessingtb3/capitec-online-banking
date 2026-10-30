@@ -1,25 +1,32 @@
 import { Link } from 'react-router';
 import styled from 'styled-components';
-import { colors, fontWeights, layout, media, space } from '../../theme/tokens';
+import { colors, fontWeights, media, space } from '../../theme/tokens';
 
 export const HeaderBar = styled.header`
   background: ${colors.background};
   border-bottom: 1px solid ${colors.border};
 `;
 
+/**
+ * Spans the full window width (unlike the page content), so the logo and the
+ * greeting sit at the far left and right, as on the brand site.
+ */
 export const HeaderInner = styled.div`
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: ${space.sm} ${space.lg};
-  max-width: calc(${layout.maxWidth} + 2 * ${space.lg});
-  margin: 0 auto;
   padding: ${space.sm} ${space.md};
 
   ${media.tablet} {
     flex-wrap: nowrap;
     min-height: 76px;
     padding: 0 ${space.lg};
+  }
+
+  ${media.desktop} {
+    gap: ${space.xxl};
+    padding: 0 ${space.xl};
   }
 `;
 
@@ -80,8 +87,18 @@ export const NavSlot = styled.div`
 `;
 
 export const Greeting = styled.p`
+  display: inline-flex;
+  align-items: center;
+  gap: ${space.xs};
   margin-left: auto;
   font-weight: ${fontWeights.semibold};
   color: ${colors.text};
   white-space: nowrap;
+`;
+
+export const ProfileIcon = styled.svg`
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  color: ${colors.textMuted};
 `;

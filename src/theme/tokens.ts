@@ -13,6 +13,9 @@ export const colors = {
   buttonHoverBackground: '#2259d0',
 
   /* ---- Supporting tokens (neutrals, surfaces and status) ---- */
+  /** Blue for interactive text (active/hovered tabs). Same blue as the button hover:
+   *  #2e70ef on white is ~4.49:1, just under WCAG AA's 4.5:1 for normal text; this is ~6.2:1. */
+  linkText: '#2259d0',
   textMuted: '#5f6873',
   border: '#e3e6eb',
   surfaceMuted: '#f3f3f3',

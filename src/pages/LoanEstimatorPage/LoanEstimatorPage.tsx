@@ -10,10 +10,11 @@ import { useGetLoanProductsQuery, useGetValidationRulesQuery } from '../../servi
 import type { LoanProductId } from '../../types/loans';
 import { getErrorMessage } from '../../utils/getErrorMessage';
 
+// The first tab is the one the page opens on.
 const TABS = [
-  { id: 'eligibility', label: 'Eligibility' },
-  { id: 'calculator', label: 'Repayment calculator' },
-  { id: 'products', label: 'Loan products' },
+  { id: 'products', label: 'Loan products', icon: 'stacked-cards' },
+  { id: 'eligibility', label: 'Eligibility', icon: 'badge-check' },
+  { id: 'calculator', label: 'Repayment calculator', icon: 'calculator' },
 ] as const;
 
 type TabId = (typeof TABS)[number]['id'];
@@ -43,6 +44,15 @@ export function LoanEstimatorPage() {
 
     return (
       <>
+        <TabPanel idPrefix="loans" id="products" activeId={activeTab}>
+          <LoanProducts
+            products={products.data.products}
+            onCheckEligibility={(productId) => {
+              setChosenProductId(productId);
+              setActiveTab('eligibility');
+            }}
+          />
+        </TabPanel>
         <TabPanel idPrefix="loans" id="eligibility" activeId={activeTab}>
           {/* Re-mounts with the product chosen on the Loan products tab. */}
           <EligibilityChecker
@@ -55,15 +65,6 @@ export function LoanEstimatorPage() {
         <TabPanel idPrefix="loans" id="calculator" activeId={activeTab}>
           <RepaymentCalculator products={products.data.products} rules={rules.data} />
         </TabPanel>
-        <TabPanel idPrefix="loans" id="products" activeId={activeTab}>
-          <LoanProducts
-            products={products.data.products}
-            onCheckEligibility={(productId) => {
-              setChosenProductId(productId);
-              setActiveTab('eligibility');
-            }}
-          />
-        </TabPanel>
       </>
     );
   };
@@ -72,7 +73,7 @@ export function LoanEstimatorPage() {
     <PageShell
       documentTitle="Loan estimator · Capitec"
       title="See what you could borrow"
-      lead="Check your eligibility, work out repayments, and compare our loan products. Estimates won’t affect your credit record."
+      lead="Compare our loan products, check your eligibility and work out your repayments. Estimates won’t affect your credit record."
       tabs={<Tabs tabs={TABS} activeId={activeTab} onChange={setActiveTab} label="Loan estimator sections" idPrefix="loans" />}
     >
       {renderContent()}

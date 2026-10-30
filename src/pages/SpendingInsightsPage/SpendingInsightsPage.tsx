@@ -21,9 +21,9 @@ import { getErrorMessage } from '../../utils/getErrorMessage';
 import { FilterRow, OverviewStack } from './SpendingInsightsPage.styles';
 
 const TABS = [
-  { id: 'overview', label: 'Overview' },
-  { id: 'trends', label: 'Trends' },
-  { id: 'transactions', label: 'Transactions' },
+  { id: 'overview', label: 'Overview', icon: 'pie-chart' },
+  { id: 'trends', label: 'Trends', icon: 'bar-chart' },
+  { id: 'transactions', label: 'Transactions', icon: 'list' },
 ] as const;
 
 type TabId = (typeof TABS)[number]['id'];
