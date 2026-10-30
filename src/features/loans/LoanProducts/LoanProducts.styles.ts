@@ -1,15 +1,36 @@
 import styled from 'styled-components';
 import { colors, fontSizes, fontWeights, media, radii, shadows, space } from '../../../theme/tokens';
 
-export const Grid = styled.ul`
+/** Cards on the left, illustration on the right (desktop only). */
+export const Layout = styled.div`
+  display: grid;
+  gap: ${space.xl};
+  align-items: center;
+
+  ${media.desktop} {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  }
+`;
+
+/** One product per row: Personal Loan, then Vehicle Finance under it. */
+export const ProductList = styled.ul`
   display: grid;
   gap: ${space.lg};
   margin: 0;
   padding: 0;
   list-style: none;
+`;
 
-  ${media.tablet} {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+/** Decorative, so it's left out on smaller screens where it would crowd the cards. */
+export const Illustration = styled.img`
+  display: none;
+
+  ${media.desktop} {
+    display: block;
+    width: 100%;
+    max-width: 520px;
+    height: auto;
+    justify-self: center;
   }
 `;
 

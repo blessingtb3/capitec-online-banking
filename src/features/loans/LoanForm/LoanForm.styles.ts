@@ -79,3 +79,10 @@ export const ErrorSummary = styled.p`
   color: ${colors.error};
   font-weight: ${fontWeights.bold};
 `;
+
+/** Explains why the submit button is disabled. */
+export const SubmitHint = styled.p`
+  margin-top: -${space.sm};
+  font-size: ${fontSizes.sm};
+  color: ${colors.textMuted};
+`;

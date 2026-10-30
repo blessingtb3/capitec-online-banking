@@ -14,8 +14,9 @@ import {
   ProductMeta,
   ProductName,
   ProductOptions,
+  SubmitHint,
 } from './LoanForm.styles';
-import { EMPTY_VALUES, EXAMPLE_VALUES, toEligibilityRequest, type LoanFormValues } from './loanFormValues';
+import { EMPTY_VALUES, EXAMPLE_VALUES, isFormComplete, toEligibilityRequest, type LoanFormValues } from './loanFormValues';
 
 /** Field order on screen, used to focus the first invalid field. */
 const FIELD_ORDER: LoanField[] = [
@@ -40,9 +41,11 @@ interface LoanFormProps {
   onSubmit: (request: EligibilityRequest, product: LoanProduct) => void;
   /** Preselects a product, e.g. when arriving from the Loan products tab. */
   initialProductId?: LoanProductId;
+  /** Called when the selected loan type changes (e.g. to swap the page image). */
+  onProductChange?: (productId: LoanProductId) => void;
 }
 
-export function LoanForm({ products, rules, isSubmitting, onSubmit, initialProductId }: LoanFormProps) {
+export function LoanForm({ products, rules, isSubmitting, onSubmit, initialProductId, onProductChange }: LoanFormProps) {
   const [values, setValues] = useState<LoanFormValues>({
     ...EMPTY_VALUES,
     productId: initialProductId ?? EMPTY_VALUES.productId,
@@ -78,6 +81,7 @@ export function LoanForm({ products, rules, isSubmitting, onSubmit, initialProdu
   };
 
   const errorCount = Object.keys(errors).length;
+  const isComplete = isFormComplete(values);
   const field = (name: LoanField) => ({
     id: fieldId(name),
     error: errors[name],
@@ -98,6 +102,7 @@ export function LoanForm({ products, rules, isSubmitting, onSubmit, initialProdu
                 onChange={() => {
                   update('productId', option.id);
                   update('loanPurpose', '');
+                  onProductChange?.(option.id);
                 }}
               />
               <ProductName>{option.name}</ProductName>
@@ -209,7 +214,11 @@ export function LoanForm({ products, rules, isSubmitting, onSubmit, initialProdu
       )}
 
       <Actions>
-        <Button type="submit" disabled={isSubmitting}>
+        <Button
+          type="submit"
+          disabled={isSubmitting || !isComplete}
+          aria-describedby={isComplete ? undefined : 'loan-submit-hint'}
+        >
           {isSubmitting ? 'Checking…' : 'Check my eligibility'}
         </Button>
         <Button
@@ -217,11 +226,13 @@ export function LoanForm({ products, rules, isSubmitting, onSubmit, initialProdu
           onClick={() => {
             setValues(EXAMPLE_VALUES);
             setErrors({});
+            onProductChange?.(EXAMPLE_VALUES.productId);
           }}
         >
           Use example values
         </Button>
       </Actions>
+      {!isComplete && <SubmitHint id="loan-submit-hint">Fill in all the required fields to check your eligibility.</SubmitHint>}
     </Form>
   );
 }

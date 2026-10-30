@@ -11,6 +11,13 @@ export const Layout = styled.div`
   }
 `;
 
+/** Loan photo with the repayments card underneath. */
+export const ResultColumn = styled.div`
+  display: grid;
+  gap: ${space.lg};
+  align-content: start;
+`;
+
 export const Form = styled.form`
   display: grid;
   gap: ${space.md};

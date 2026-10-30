@@ -11,12 +11,11 @@ export const Columns = styled.div`
   }
 `;
 
-/** Keeps the result in view while the form scrolls on large screens. */
+/** Loan photo with the estimate card underneath. */
 export const ResultColumn = styled.div`
-  ${media.desktop} {
-    position: sticky;
-    top: ${space.lg};
-  }
+  display: grid;
+  gap: ${space.lg};
+  align-content: start;
 `;
 
 export const Placeholder = styled.div`

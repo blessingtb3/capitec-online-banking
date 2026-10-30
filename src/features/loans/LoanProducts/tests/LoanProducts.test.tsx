@@ -13,6 +13,20 @@ describe('LoanProducts', () => {
     expect(within(vehicle).getByText('Used vehicle')).toBeInTheDocument();
   });
 
+  it('stacks Vehicle Finance under Personal Loan', () => {
+    render(<LoanProducts products={loanProducts.products} onCheckEligibility={() => {}} />);
+    const names = screen.getAllByRole('heading', { level: 2 }).map((heading) => heading.textContent);
+    expect(names).toEqual(['Personal Loan', 'Vehicle Finance']);
+  });
+
+  it('shows the loan illustration as a decorative image', () => {
+    const { container } = render(<LoanProducts products={loanProducts.products} onCheckEligibility={() => {}} />);
+    const image = container.querySelector('img')!;
+    expect(image.getAttribute('src')).toContain('loan');
+    expect(image).toHaveAttribute('alt', '');
+    expect(screen.queryByRole('img')).not.toBeInTheDocument();
+  });
+
   it('starts an eligibility check for the chosen product', async () => {
     const onCheck = vi.fn();
     render(<LoanProducts products={loanProducts.products} onCheckEligibility={onCheck} />);

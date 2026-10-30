@@ -8,8 +8,9 @@ import type { LoanProduct, LoanProductId, ValidationRules } from '../../../types
 import { formatCurrency, formatPercent } from '../../../utils/format';
 import { getErrorMessage } from '../../../utils/getErrorMessage';
 import { parseAmount } from '../../../utils/parseAmount';
+import { LoanProductImage } from '../LoanProductImage/LoanProductImage';
 import { RepaymentSchedule } from '../RepaymentSchedule/RepaymentSchedule';
-import { Facts, Form, Layout, Placeholder } from './RepaymentCalculator.styles';
+import { Facts, Form, Layout, Placeholder, ResultColumn } from './RepaymentCalculator.styles';
 
 interface RepaymentCalculatorProps {
   products: LoanProduct[];
@@ -23,7 +24,7 @@ export function RepaymentCalculator({ products, rules }: RepaymentCalculatorProp
   const [productId, setProductId] = useState<LoanProductId>(products[0].id);
   const [values, setValues] = useState<Record<Field, string>>({ loanAmount: '', loanTerm: '', creditScore: '' });
   const [errors, setErrors] = useState<Partial<Record<Field, string>>>({});
-  const [calculateRate, { data, isLoading, isError, error }] = useCalculateRateMutation();
+  const [calculateRate, { data, isLoading, isError, error, isUninitialized }] = useCalculateRateMutation();
 
   const product = products.find((p) => p.id === productId) ?? products[0];
 
@@ -134,9 +135,13 @@ export function RepaymentCalculator({ products, rules }: RepaymentCalculatorProp
           </Button>
         </Form>
       </Card>
-      <Card id="calculator-result" title="Your repayments">
-        <div aria-live="polite">{renderResult()}</div>
-      </Card>
+      <ResultColumn>
+        {/* Hidden once a calculation starts, so the repayments take its place. */}
+        {isUninitialized && <LoanProductImage productId={productId} />}
+        <Card id="calculator-result" title="Your repayments">
+          <div aria-live="polite">{renderResult()}</div>
+        </Card>
+      </ResultColumn>
     </Layout>
   );
 }

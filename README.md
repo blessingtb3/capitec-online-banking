@@ -5,7 +5,7 @@ A responsive React + TypeScript app covering both frontend briefs as two separat
 | Page | URL | Tabs |
 | --- | --- | --- |
 | **Spending Insights** | `/spending-insights` | **Overview** (KPI tiles, spending by category as a Chart.js doughnut, and monthly budget progress shown only with the *This month* filter; picking a category opens its transactions) · **Trends** (Chart.js bar, 6/12/24 months) · **Transactions** (filter, sort, paginate) |
-| **Loan Estimator** | `/loan-estimator` | **Loan products** (opens first: product details, with a "Check eligibility" shortcut) · **Eligibility** (validated form → decision, likelihood, recommended loan, affordability, repayment schedule) · **Repayment calculator** (any amount, term and credit score) |
+| **Loan Estimator** | `/loan-estimator` | **Loan products** (opens first: Personal Loan and Vehicle Finance cards stacked, with an illustration beside them on desktop and a "Check eligibility" shortcut on each) · **Eligibility** (the button unlocks once the required fields are filled; validated form → decision, likelihood, recommended loan, affordability, repayment schedule; on desktop a photo for the selected loan type sits above the estimate until the first check) · **Repayment calculator** (any amount, term and credit score; on desktop the loan type's photo sits above the result until the first calculation) |
 
 - `/` redirects to Spending Insights, and unknown URLs show a "page not found" page.
 - The active tab is kept in the URL (`?tab=transactions`), so tabs survive a refresh, can be bookmarked or shared, and work with the back button.
@@ -77,13 +77,15 @@ src/
 ├── theme/
 │   ├── tokens.ts                 Design tokens (colours, type, spacing, radii, breakpoints)
 │   └── GlobalStyle.styles.ts     Global CSS (styled-components)
-├── assets/capitec-logo.png       Header logo (cropped to the logo strip in Header.styles.ts)
+├── assets/                       capitec-logo.png (header; cropped to the logo strip in Header.styles.ts)
+│                                 loan.png (Loan products tab illustration; desktop only)
+│                                 personal-loan.png / vehicle-loan.png (Eligibility and Repayment calculator tabs, via LoanProductImage)
 ├── components/                   Shared UI: Button, Card, Header, Icon, MainNav, PageShell, Tabs (+ TabPanel),
 │                                 FormField, SegmentedControl, ProgressBar, StatusMessage, CategoryIcon
 ├── features/
 │   ├── spending/                 SummaryTiles, DateRangeFilter, CategoryBreakdown,
 │   │                             SpendingTrendsChart, GoalsCard, TransactionsTable
-│   └── loans/                    EligibilityChecker, LoanForm, EligibilityResult,
+│   └── loans/                    EligibilityChecker, LoanForm, EligibilityResult, LoanProductImage,
 │                                 RepaymentCalculator, RepaymentSchedule, LoanProducts
 ├── services/                     RTK Query: baseApi + spendingApi + loansApi
 ├── mocks/                        Mock backend: base query, route handlers, spec data

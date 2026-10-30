@@ -71,3 +71,24 @@ export function toEligibilityRequest(values: LoanFormValues): EligibilityRequest
     },
   };
 }
+
+const isFilled = (value: string) => value.trim() !== '';
+
+/**
+ * True once every required field has a value, so the submit button can be
+ * enabled. Existing debt and credit score are optional, and months employed
+ * only applies to people who are working. Range checks happen on submit.
+ */
+export function isFormComplete(values: LoanFormValues): boolean {
+  const isWorking = values.employmentStatus === 'employed' || values.employmentStatus === 'self_employed';
+  return (
+    isFilled(values.age) &&
+    values.employmentStatus !== '' &&
+    (!isWorking || isFilled(values.employmentDuration)) &&
+    isFilled(values.monthlyIncome) &&
+    isFilled(values.monthlyExpenses) &&
+    values.loanPurpose !== '' &&
+    isFilled(values.requestedAmount) &&
+    isFilled(values.loanTerm)
+  );
+}

@@ -7,6 +7,7 @@ import { getErrorMessage } from '../../../utils/getErrorMessage';
 import { EligibilityResult } from '../EligibilityResult/EligibilityResult';
 import { LoanForm } from '../LoanForm/LoanForm';
 import { RepaymentSchedule } from '../RepaymentSchedule/RepaymentSchedule';
+import { LoanProductImage } from '../LoanProductImage/LoanProductImage';
 import { Columns, Placeholder, ResultColumn, ScheduleTitle } from './EligibilityChecker.styles';
 
 interface Submission {
@@ -22,6 +23,7 @@ interface EligibilityCheckerProps {
 
 /** Form + result. After a successful check, fetches the repayment schedule for the recommended amount. */
 export function EligibilityChecker({ products, rules, initialProductId }: EligibilityCheckerProps) {
+  const [selectedProductId, setSelectedProductId] = useState<LoanProductId>(initialProductId ?? products[0].id);
   const [checkEligibility, eligibility] = useCheckEligibilityMutation();
   const [calculateRate, rate] = useCalculateRateMutation();
   const [submission, setSubmission] = useState<Submission | null>(null);
@@ -90,10 +92,13 @@ export function EligibilityChecker({ products, rules, initialProductId }: Eligib
           rules={rules}
           isSubmitting={eligibility.isLoading}
           initialProductId={initialProductId}
+          onProductChange={setSelectedProductId}
           onSubmit={(request, product) => runCheck({ request, product })}
         />
       </Card>
       <ResultColumn>
+        {/* Hidden once a check starts, so the estimate takes its place. */}
+        {!submission && <LoanProductImage productId={selectedProductId} />}
         <Card id="loan-result" title="Your estimate">
           <div aria-live="polite">{renderResult()}</div>
         </Card>
