@@ -22,8 +22,8 @@ import { FilterRow, OverviewStack } from './SpendingInsightsPage.styles';
 
 const TABS = [
   { id: 'overview', label: 'Overview', icon: 'pie-chart' },
-  { id: 'trends', label: 'Trends', icon: 'bar-chart' },
   { id: 'transactions', label: 'Transactions', icon: 'list' },
+  { id: 'trends', label: 'Trends', icon: 'bar-chart' },
 ] as const;
 
 type TabId = (typeof TABS)[number]['id'];
@@ -34,9 +34,21 @@ const FILTERED_TABS: TabId[] = ['overview', 'transactions'];
 
 export function SpendingInsightsPage({ customerId }: { customerId: string }) {
   const [activeTab, setActiveTab] = useTabParam<TabId>(TAB_IDS);
-  const [period, setPeriod] = useState<Period>('30d');
+  // Opens on the current calendar month, which also shows the monthly budgets.
+  const [period, setPeriod] = useState<Period>('mtd');
   const [customRange, setCustomRange] = useState<DateRange | null>(null);
   const [category, setCategory] = useState<string | null>(null);
+
+  // Clear the category filter whenever Overview becomes the active tab (by click,
+  // keyboard or the back button). This adjusts state during render, React's
+  // recommended alternative to an effect. It only fires when the tab actually
+  // changes, so picking a category on Overview (which sets the category and
+  // switches to Transactions together) isn't undone.
+  const [previousTab, setPreviousTab] = useState(activeTab);
+  if (activeTab !== previousTab) {
+    setPreviousTab(activeTab);
+    if (activeTab === 'overview') setCategory(null);
+  }
 
   const profile = useGetCustomerProfileQuery(customerId);
   const filters = useGetFiltersQuery(customerId);
@@ -112,10 +124,6 @@ export function SpendingInsightsPage({ customerId }: { customerId: string }) {
           </OverviewStack>
         </TabPanel>
 
-        <TabPanel idPrefix="insights" id="trends" activeId={activeTab}>
-          <SpendingTrendsChart customerId={customerId} />
-        </TabPanel>
-
         <TabPanel idPrefix="insights" id="transactions" activeId={activeTab}>
           {transactionRange ? (
             <TransactionsTable
@@ -129,6 +137,10 @@ export function SpendingInsightsPage({ customerId }: { customerId: string }) {
           ) : (
             <StatusMessage variant="loading" title="Loading transactions…" />
           )}
+        </TabPanel>
+
+        <TabPanel idPrefix="insights" id="trends" activeId={activeTab}>
+          <SpendingTrendsChart customerId={customerId} />
         </TabPanel>
       </>
     );

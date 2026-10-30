@@ -13,7 +13,8 @@ const STATUS_LABEL: Record<GoalStatus, string> = {
   exceeded: 'Over budget',
 };
 
-const STATUS_TONE = { on_track: 'success', warning: 'warning', exceeded: 'error' } as const;
+/** Bar colour per status: close to the limit shows red, the same as over budget. */
+const STATUS_TONE = { on_track: 'success', warning: 'error', exceeded: 'error' } as const;
 
 export function GoalsCard({ customerId }: { customerId: string }) {
   const { data, isLoading, isError, error, refetch } = useGetGoalsQuery(customerId);

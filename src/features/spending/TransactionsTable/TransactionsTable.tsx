@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Button } from '../../../components/Button/Button';
 import { Card } from '../../../components/Card/Card';
-import { CategoryIcon } from '../../../components/CategoryIcon/CategoryIcon';
 import { StatusMessage } from '../../../components/StatusMessage/StatusMessage';
 import { useGetTransactionsQuery } from '../../../services/spendingApi';
 import type { DateRange, FilterCategory, SortBy } from '../../../types/spending';
@@ -89,11 +88,8 @@ export function TransactionsTable({ customerId, dateRange, categories, category,
               <tr key={transaction.id}>
                 <td data-column="merchant">
                   <Merchant>
-                    <CategoryIcon icon={transaction.icon} color={transaction.categoryColor} size={34} />
-                    <span>
-                      {transaction.merchant}
-                      <Description>{transaction.description}</Description>
-                    </span>
+                    {transaction.merchant}
+                    <Description>{transaction.description}</Description>
                   </Merchant>
                 </td>
                 <td data-column="category">{transaction.category}</td>
@@ -101,7 +97,7 @@ export function TransactionsTable({ customerId, dateRange, categories, category,
                   <Muted>{transaction.paymentMethod}</Muted>
                 </td>
                 <td data-column="date">{formatDate(transaction.date)}</td>
-                <AmountCell>−{formatCurrency(transaction.amount)}</AmountCell>
+                <AmountCell data-column="amount">−{formatCurrency(transaction.amount)}</AmountCell>
               </tr>
             ))}
           </tbody>

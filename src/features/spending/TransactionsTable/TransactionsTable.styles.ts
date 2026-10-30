@@ -76,8 +76,14 @@ export const Table = styled.table`
       grid-row: 1 / 3;
     }
 
+    td[data-column='amount'] {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
     td[data-column='date'] {
       grid-column: 2;
+      grid-row: 2;
       text-align: right;
       font-size: ${fontSizes.xs};
       color: ${colors.textMuted};
@@ -91,9 +97,7 @@ export const Table = styled.table`
 `;
 
 export const Merchant = styled.span`
-  display: flex;
-  align-items: center;
-  gap: ${space.sm};
+  display: block;
   font-weight: ${fontWeights.bold};
 `;
 

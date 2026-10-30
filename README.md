@@ -4,13 +4,13 @@ A responsive React + TypeScript app covering both frontend briefs as two separat
 
 | Page | URL | Tabs |
 | --- | --- | --- |
-| **Spending Insights** | `/spending-insights` | **Overview** (KPI tiles, spending by category as a Chart.js doughnut, and monthly budget progress shown only with the *This month* filter; picking a category opens its transactions) · **Trends** (Chart.js bar, 6/12/24 months) · **Transactions** (filter, sort, paginate) |
+| **Spending Insights** | `/spending-insights` | **Overview** (KPI tiles, spending by category as a Chart.js doughnut, and monthly budget progress shown only with the *This month* filter; picking a category opens its transactions) · **Transactions** (filter, sort, paginate) · **Trends** (Chart.js bar, 6/12/24 months) |
 | **Loan Estimator** | `/loan-estimator` | **Loan products** (opens first: Personal Loan and Vehicle Finance cards stacked, with an illustration beside them on desktop and a "Check eligibility" shortcut on each) · **Eligibility** (the button unlocks once the required fields are filled; validated form → decision, likelihood, recommended loan, affordability, repayment schedule; on desktop a photo for the selected loan type sits above the estimate until the first check) · **Repayment calculator** (any amount, term and credit score; on desktop the loan type's photo sits above the result until the first calculation) |
 
 - `/` redirects to Spending Insights, and unknown URLs show a "page not found" page.
 - The active tab is kept in the URL (`?tab=transactions`), so tabs survive a refresh, can be bookmarked or shared, and work with the back button.
 - Inactive tabs stay mounted, so form input and results aren't lost when you switch tabs.
-- The period filter appears on the tabs that use it. On Overview it offers the preset periods only (This month, Last 7 days, Last 30 days, Last 90 days, Last year), because the summary endpoint doesn't accept custom dates; this keeps the tiles and categories on the same dates. On Transactions you can also choose a custom date range.
+- The period filter appears on the tabs that use it. The page opens on **This month**. On Overview the filter offers the preset periods only (This month, Last 7 days, Last 30 days, Last 90 days, Last year), because the summary endpoint doesn't accept custom dates; this keeps the tiles and categories on the same dates. On Transactions you can also choose a custom date range.
 
 All data is **mocked** through RTK Query, following the API specifications exactly (see [Mock API](#mock-api)). The visual style follows Capitec's public website. This is a job-application concept and is not affiliated with Capitec Bank.
 

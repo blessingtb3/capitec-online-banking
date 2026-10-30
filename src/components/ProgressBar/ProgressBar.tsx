@@ -19,7 +19,7 @@ export function ProgressBar({ value, label, tone = 'primary', valueText }: Progr
       aria-valuenow={Math.round(clamped)}
       aria-valuetext={valueText}
     >
-      <Fill $tone={tone} $percent={clamped} />
+      <Fill $tone={tone} $percent={clamped} data-tone={tone} />
     </Track>
   );
 }

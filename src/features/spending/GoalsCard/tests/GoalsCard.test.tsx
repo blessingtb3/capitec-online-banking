@@ -15,4 +15,12 @@ describe('GoalsCard', () => {
     expect(screen.getByText('R1 450.80 of R1 500.00')).toBeInTheDocument();
     expect(screen.getAllByText('12 days left')).toHaveLength(2);
   });
+
+  it('shows a red bar when a budget is close to its limit, and green when on track', async () => {
+    renderWithProviders(<GoalsCard customerId="12345" />);
+    const groceries = await screen.findByRole('progressbar', { name: 'Groceries budget used' });
+    const entertainment = screen.getByRole('progressbar', { name: 'Entertainment budget used' });
+    expect(groceries.firstElementChild).toHaveAttribute('data-tone', 'error');
+    expect(entertainment.firstElementChild).toHaveAttribute('data-tone', 'success');
+  });
 });

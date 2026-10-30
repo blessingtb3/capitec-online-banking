@@ -33,6 +33,13 @@ describe('TransactionsTable', () => {
     expect(screen.getByText('Showing 1–10 of 47')).toBeInTheDocument();
   });
 
+  it('lists merchants without category icons', async () => {
+    setup();
+    await screen.findByRole('table');
+    expect(screen.getByRole('table').querySelector('svg')).toBeNull();
+    expect(bodyRows()[0]).toHaveTextContent('Weekly groceries');
+  });
+
   it('pages through results', async () => {
     setup();
     await screen.findByRole('table');

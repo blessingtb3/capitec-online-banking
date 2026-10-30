@@ -14,7 +14,7 @@ describe('SpendingInsightsPage', () => {
   it('opens on the Overview tab, showing the summary and categories together', async () => {
     await renderPage();
     expect(screen.getByText(/Premium account · customer since Jan 2023/)).toBeInTheDocument();
-    expect(screen.getAllByRole('tab').map((tab) => tab.textContent)).toEqual(['Overview', 'Trends', 'Transactions']);
+    expect(screen.getAllByRole('tab').map((tab) => tab.textContent)).toEqual(['Overview', 'Transactions', 'Trends']);
     expect(screen.getByRole('tab', { name: 'Overview' })).toHaveAttribute('aria-selected', 'true');
     expect(await within(activePanel()).findByText('Total spent')).toBeInTheDocument();
     expect(within(activePanel()).getByRole('region', { name: 'Spending by category' })).toBeInTheDocument();
@@ -54,10 +54,10 @@ describe('SpendingInsightsPage', () => {
     });
   });
 
-  it('shows this calendar month on the overview, including monthly budgets', async () => {
+  it('opens on This month, including monthly budgets', async () => {
     await renderPage();
-    await within(activePanel()).findByText('Total spent');
-    await userEvent.click(screen.getByRole('button', { name: 'This month' }));
+    expect(screen.getByRole('button', { name: 'This month' })).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getByRole('button', { name: 'Last 30 days' })).toHaveAttribute('aria-pressed', 'false');
     expect(await within(activePanel()).findByText(/^1 Sep 2024 – 16 Sep 2024 · select a category/)).toBeInTheDocument();
     expect(await within(activePanel()).findByText('R1 977.57')).toBeInTheDocument();
     expect(within(activePanel()).getByText('−12% vs this time last month')).toBeInTheDocument();
@@ -75,6 +75,35 @@ describe('SpendingInsightsPage', () => {
       expect(within(activePanel()).queryByRole('region', { name: 'Monthly budgets' })).not.toBeInTheDocument();
     },
   );
+
+  it('clears the category chosen on Overview when Overview is opened again', async () => {
+    await renderPage();
+    await userEvent.click(await within(activePanel()).findByRole('button', { name: /Groceries/ }));
+    expect(within(activePanel()).getByLabelText('Filter by category')).toHaveValue('Groceries');
+
+    await userEvent.click(screen.getByRole('tab', { name: 'Overview' }));
+    const groceries = await within(activePanel()).findByRole('button', { name: /Groceries/ });
+    expect(groceries).toHaveAttribute('aria-pressed', 'false');
+
+    await userEvent.click(screen.getByRole('tab', { name: 'Transactions' }));
+    expect(within(activePanel()).getByLabelText('Filter by category')).toHaveValue('');
+  });
+
+  it('clears a category picked on Transactions when Overview is opened', async () => {
+    await renderPage('/spending-insights?tab=transactions');
+    await userEvent.selectOptions(await within(activePanel()).findByLabelText('Filter by category'), 'Dining');
+    await userEvent.click(screen.getByRole('tab', { name: 'Overview' }));
+    await userEvent.click(screen.getByRole('tab', { name: 'Transactions' }));
+    expect(within(activePanel()).getByLabelText('Filter by category')).toHaveValue('');
+  });
+
+  it('keeps the category when moving between other tabs', async () => {
+    await renderPage('/spending-insights?tab=transactions');
+    await userEvent.selectOptions(await within(activePanel()).findByLabelText('Filter by category'), 'Dining');
+    await userEvent.click(screen.getByRole('tab', { name: 'Trends' }));
+    await userEvent.click(screen.getByRole('tab', { name: 'Transactions' }));
+    expect(within(activePanel()).getByLabelText('Filter by category')).toHaveValue('Dining');
+  });
 
   it('applies a custom date range to transactions', async () => {
     await renderPage('/spending-insights?tab=transactions');

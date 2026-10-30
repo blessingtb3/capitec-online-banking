@@ -13,4 +13,11 @@ describe('ProgressBar', () => {
     render(<ProgressBar value={140} label="Over budget" />);
     expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '100');
   });
+
+  it('colours the bar by tone', () => {
+    render(<ProgressBar value={90} label="Groceries budget" tone="error" />);
+    const fill = screen.getByRole('progressbar').firstElementChild as HTMLElement;
+    expect(fill).toHaveAttribute('data-tone', 'error');
+    expect(getComputedStyle(fill).backgroundColor).toBe('rgb(179, 38, 30)');
+  });
 });
