@@ -27,17 +27,24 @@ export default defineConfig([
     },
   },
 
-  // TypeScript files: unit tests (tests/*.test.tsx) and test setup
+  // TypeScript: the app (components, styles, services, mocks) and its tests
   {
     files: ['src/**/*.{ts,tsx}'],
     extends: [
       js.configs.recommended,
       tseslint.configs.recommended,
       reactHooks.configs.flat.recommended,
+      reactRefresh.configs.vite(),
     ],
     languageOptions: {
       globals: { ...globals.browser, ...globals.vitest },
     },
+  },
+
+  // Tests and test helpers may export non-components and use the vitest globals
+  {
+    files: ['src/**/tests/**/*.{ts,tsx}', 'src/test-utils/**', 'src/setupTests.ts'],
+    rules: { 'react-refresh/only-export-components': 'off' },
   },
 
   // Config files that run in Node
