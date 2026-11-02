@@ -38,11 +38,11 @@
 }
 
 .warning {
-  color: var(--color-error);
+  color: var(--color-accent-red);
 }
 
 .exceeded {
-  color: var(--color-error);
+  color: var(--color-accent-red);
 }
 
 .goalMeta {

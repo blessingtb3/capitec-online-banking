@@ -20,7 +20,7 @@ describe('GoalsCard', () => {
     renderWithProviders(<GoalsCard customerId="12345" />);
     const groceries = await screen.findByRole('progressbar', { name: 'Groceries budget used' });
     const entertainment = screen.getByRole('progressbar', { name: 'Entertainment budget used' });
-    expect(groceries.firstElementChild).toHaveAttribute('data-tone', 'error');
+    expect(groceries.firstElementChild).toHaveAttribute('data-tone', 'accentRed');
     expect(entertainment.firstElementChild).toHaveAttribute('data-tone', 'success');
   });
 });

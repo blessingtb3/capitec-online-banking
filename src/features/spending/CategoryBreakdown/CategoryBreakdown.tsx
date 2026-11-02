@@ -43,7 +43,6 @@ export function CategoryBreakdown({ data, selectedCategory, onSelectCategory }: 
         backgroundColor: data.categories.map((c) => c.color),
         borderColor: colors.background,
         borderWidth: 2,
-        hoverOffset: 6,
       },
     ],
   };
@@ -57,13 +56,10 @@ export function CategoryBreakdown({ data, selectedCategory, onSelectCategory }: 
           options={{
             cutout: '68%',
             maintainAspectRatio: false,
+            // Display only: no hover or tap effects.
+            events: [],
             plugins: {
               legend: { display: false },
-              tooltip: {
-                callbacks: {
-                  label: (item) => ` ${formatCurrency(Number(item.raw))} (${formatPercent(data.categories[item.dataIndex].percentage)})`,
-                },
-              },
             },
           }}
         />

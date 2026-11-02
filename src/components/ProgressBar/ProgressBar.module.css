@@ -28,3 +28,7 @@
 .fill[data-tone='error'] {
   background: var(--color-error);
 }
+
+.fill[data-tone='accentRed'] {
+  background: var(--color-accent-red);
+}

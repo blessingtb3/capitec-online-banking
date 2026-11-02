@@ -1,6 +1,6 @@
 import styles from './ProgressBar.module.css';
 
-export type ProgressTone = 'primary' | 'success' | 'warning' | 'error';
+export type ProgressTone = 'primary' | 'success' | 'warning' | 'error' | 'accentRed';
 
 interface ProgressBarProps {
   /** 0–100; values outside are clamped for display. */

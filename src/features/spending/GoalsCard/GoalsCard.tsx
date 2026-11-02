@@ -13,8 +13,8 @@ const STATUS_LABEL: Record<GoalStatus, string> = {
   exceeded: 'Over budget',
 };
 
-/** Bar colour per status: close to the limit shows red, the same as over budget. */
-const STATUS_TONE = { on_track: 'success', warning: 'error', exceeded: 'error' } as const;
+/** Bar colour per status: close to the limit shows Capitec red, the same as over budget. */
+const STATUS_TONE = { on_track: 'success', warning: 'accentRed', exceeded: 'accentRed' } as const;
 
 export function GoalsCard({ customerId }: { customerId: string }) {
   const { goalList, goalItem, goalHead, goalName, statusBadge, goalMeta } = styles;
