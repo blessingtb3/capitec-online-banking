@@ -19,6 +19,7 @@ export const colors = {
    *  #2e70ef on white is ~4.49:1, just under WCAG AA's 4.5:1 for normal text; this is ~6.2:1. */
   linkText: '#2259d0',
   textMuted: '#5f6873',
+  footerText: '#3a3a3a',
   border: '#e3e6eb',
   surfaceMuted: '#f3f3f3',
   primaryTint: '#eef3fd',

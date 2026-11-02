@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes } from 'react-router';
+import { Footer } from './components/Footer/Footer';
 import { Header } from './components/Header/Header';
 import { MainNav } from './components/MainNav/MainNav';
 import { CURRENT_CUSTOMER_ID } from './config/constants';
@@ -10,7 +11,7 @@ import { useGetCustomerProfileQuery } from './services/spendingApi';
 import styles from './App.module.css';
 
 export default function App() {
-  const { main, footer } = styles;
+  const { main } = styles;
   const { data: profile } = useGetCustomerProfileQuery(CURRENT_CUSTOMER_ID);
 
   return (
@@ -24,7 +25,7 @@ export default function App() {
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
-      <footer className={footer}>Concept project for a job application. All data is mocked; not affiliated with Capitec Bank.</footer>
+      <Footer />
     </>
   );
 }
