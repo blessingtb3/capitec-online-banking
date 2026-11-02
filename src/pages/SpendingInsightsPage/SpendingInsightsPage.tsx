@@ -9,13 +9,14 @@ import { GoalsCard } from "../../features/spending/GoalsCard/GoalsCard";
 import { SpendingTrendsChart } from "../../features/spending/SpendingTrendsChart/SpendingTrendsChart";
 import { SummaryTiles } from "../../features/spending/SummaryTiles/SummaryTiles";
 import { TransactionsTable } from "../../features/spending/TransactionsTable/TransactionsTable";
+import { useMediaQuery } from "../../hooks/useMediaQuery";
 import { useTabParam } from "../../hooks/useTabParam";
 import {
   useGetCustomerProfileQuery,
   useGetFiltersQuery,
   useGetSpendingByCategoryQuery,
 } from "../../services/spendingApi";
-import type { DateRange, Period } from "../../types/spending";
+import type { Period } from "../../types/spending";
 import { formatDate, formatMonth, humanise } from "../../utils/format";
 import { getErrorMessage } from "../../utils/getErrorMessage";
 import styles from "./SpendingInsightsPage.module.css";
@@ -32,12 +33,15 @@ const TAB_IDS = TABS.map((tab) => tab.id);
 /** Tabs whose data depends on the period / date range filter. */
 const FILTERED_TABS: TabId[] = ["overview", "transactions"];
 
+/** Mobile is limited to the last 30 days at most. */
+const MOBILE_PERIODS: Period[] = ["mtd", "7d", "30d"];
+
 export function SpendingInsightsPage({ customerId }: { customerId: string }) {
   const { filterRow, overviewStack, summaryTiles } = styles;
   const [activeTab, setActiveTab] = useTabParam<TabId>(TAB_IDS);
+  const isMobile = useMediaQuery("(max-width: 719px)");
   // Opens on the current calendar month, which also shows the monthly budgets.
   const [period, setPeriod] = useState<Period>("mtd");
-  const [customRange, setCustomRange] = useState<DateRange | null>(null);
   const [category, setCategory] = useState<string | null>(null);
 
   // Clear the category filter whenever Overview becomes the active tab (by click,
@@ -53,12 +57,17 @@ export function SpendingInsightsPage({ customerId }: { customerId: string }) {
 
   const profile = useGetCustomerProfileQuery(customerId);
   const filters = useGetFiltersQuery(customerId);
+  // A longer period picked on a wider screen falls back to the longest one mobile offers.
+  const activePeriod =
+    isMobile && !MOBILE_PERIODS.includes(period) ? "30d" : period;
   // The overview always follows the preset period, so its tiles and categories agree.
-  const categories = useGetSpendingByCategoryQuery({ customerId, period });
+  const categories = useGetSpendingByCategoryQuery({
+    customerId,
+    period: activePeriod,
+  });
 
   const firstName = profile.data?.name.split(" ")[0];
-  // Transactions use a custom range when one is set, otherwise the period's range from the API.
-  const transactionRange = customRange ?? categories.data?.dateRange;
+  const transactionRange = categories.data?.dateRange;
 
   const renderContent = () => {
     if (filters.isLoading)
@@ -79,12 +88,15 @@ export function SpendingInsightsPage({ customerId }: { customerId: string }) {
         {FILTERED_TABS.includes(activeTab) && (
           <div className={filterRow}>
             <DateRangeFilter
-              presets={filters.data.dateRangePresets}
-              period={period}
-              customRange={customRange}
+              presets={
+                isMobile
+                  ? filters.data.dateRangePresets.filter((preset) =>
+                      MOBILE_PERIODS.includes(preset.value)
+                    )
+                  : filters.data.dateRangePresets
+              }
+              period={activePeriod}
               onPeriodChange={setPeriod}
-              onCustomRangeChange={setCustomRange}
-              allowCustom={activeTab === "transactions"}
             />
           </div>
         )}
@@ -92,7 +104,7 @@ export function SpendingInsightsPage({ customerId }: { customerId: string }) {
         <TabPanel idPrefix="insights" id="overview" activeId={activeTab}>
           <div className={overviewStack}>
             <div className={summaryTiles}>
-              <SummaryTiles customerId={customerId} period={period} />
+              <SummaryTiles customerId={customerId} period={activePeriod} />
             </div>
             <Card
               id="spending-categories"
@@ -130,7 +142,7 @@ export function SpendingInsightsPage({ customerId }: { customerId: string }) {
               )}
             </Card>
             {/* Budgets are monthly, so they only line up with the "This month" period. */}
-            {period === "mtd" && <GoalsCard customerId={customerId} />}
+            {activePeriod === "mtd" && <GoalsCard customerId={customerId} />}
           </div>
         </TabPanel>
 

@@ -29,25 +29,20 @@
 }
 
 .statusBadge {
-  padding: 2px 10px;
-  border-radius: var(--radius-pill);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
 }
 
 .on_track {
   color: var(--color-success);
-  background: var(--color-success-background);
 }
 
 .warning {
-  color: var(--color-warning);
-  background: var(--color-warning-background);
+  color: var(--color-error);
 }
 
 .exceeded {
   color: var(--color-error);
-  background: var(--color-error-background);
 }
 
 .goalMeta {

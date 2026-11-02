@@ -2,6 +2,10 @@
 import '@testing-library/jest-dom/vitest';
 import { createElement } from 'react';
 
+/** jsdom has no matchMedia, so tests run as desktop unless they mock it. */
+window.matchMedia = (query: string) =>
+  ({ matches: false, media: query, addEventListener: () => {}, removeEventListener: () => {} }) as unknown as MediaQueryList;
+
 /**
  * jsdom has no <canvas>, so Chart.js can't draw in tests. Replace the
  * react-chartjs-2 components with a stub that exposes the chart's labels and

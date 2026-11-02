@@ -1,24 +1,42 @@
-import { useState, type FormEvent } from 'react';
-import { Button } from '../../../components/Button/Button';
-import { SelectField, TextField } from '../../../components/FormField/FormField';
-import type { EligibilityRequest, LoanProduct, LoanProductId, ValidationRules } from '../../../types/loans';
-import { formatCurrency, humanise } from '../../../utils/format';
-import { validateLoanApplication, type LoanErrors, type LoanField } from '../../../utils/validateLoanApplication';
-import styles from './LoanForm.module.css';
-import { EMPTY_VALUES, EXAMPLE_VALUES, isFormComplete, toEligibilityRequest, type LoanFormValues } from './loanFormValues';
+import { useState, type FormEvent } from "react";
+import { Button } from "../../../components/Button/Button";
+import {
+  SelectField,
+  TextField,
+} from "../../../components/FormField/FormField";
+import type {
+  EligibilityRequest,
+  LoanProduct,
+  LoanProductId,
+  ValidationRules,
+} from "../../../types/loans";
+import { formatCurrency, humanise } from "../../../utils/format";
+import {
+  validateLoanApplication,
+  type LoanErrors,
+  type LoanField,
+} from "../../../utils/validateLoanApplication";
+import styles from "./LoanForm.module.css";
+import {
+  EMPTY_VALUES,
+  EXAMPLE_VALUES,
+  isFormComplete,
+  toEligibilityRequest,
+  type LoanFormValues,
+} from "./loanFormValues";
 
 /** Field order on screen, used to focus the first invalid field. */
 const FIELD_ORDER: LoanField[] = [
-  'age',
-  'employmentStatus',
-  'employmentDuration',
-  'monthlyIncome',
-  'monthlyExpenses',
-  'existingDebt',
-  'creditScore',
-  'loanPurpose',
-  'requestedAmount',
-  'loanTerm',
+  "age",
+  "employmentStatus",
+  "employmentDuration",
+  "monthlyIncome",
+  "monthlyExpenses",
+  "existingDebt",
+  "creditScore",
+  "loanPurpose",
+  "requestedAmount",
+  "loanTerm",
 ];
 
 const fieldId = (field: LoanField) => `loan-${field}`;
@@ -34,7 +52,14 @@ interface LoanFormProps {
   onProductChange?: (productId: LoanProductId) => void;
 }
 
-export function LoanForm({ products, rules, isSubmitting, onSubmit, initialProductId, onProductChange }: LoanFormProps) {
+export function LoanForm({
+  products,
+  rules,
+  isSubmitting,
+  onSubmit,
+  initialProductId,
+  onProductChange,
+}: LoanFormProps) {
   const {
     form,
     fieldset,
@@ -54,11 +79,17 @@ export function LoanForm({ products, rules, isSubmitting, onSubmit, initialProdu
   });
   const [errors, setErrors] = useState<LoanErrors>({});
 
-  const product = products.find((p) => p.id === values.productId) ?? products[0];
-  const isWorking = values.employmentStatus === 'employed' || values.employmentStatus === 'self_employed';
+  const product =
+    products.find((p) => p.id === values.productId) ?? products[0];
+  const isWorking =
+    values.employmentStatus === "employed" ||
+    values.employmentStatus === "self_employed";
 
   /** Updates one field and clears its error as the person fixes it. */
-  const update = <K extends keyof LoanFormValues>(field: K, value: LoanFormValues[K]) => {
+  const update = <K extends keyof LoanFormValues>(
+    field: K,
+    value: LoanFormValues[K]
+  ) => {
     setValues((current) => ({ ...current, [field]: value }));
     setErrors((current) => {
       const next = { ...current };
@@ -90,27 +121,43 @@ export function LoanForm({ products, rules, isSubmitting, onSubmit, initialProdu
   });
 
   return (
-    <form className={form} onSubmit={handleSubmit} noValidate aria-label="Loan eligibility">
+    <form
+      className={form}
+      onSubmit={handleSubmit}
+      noValidate
+      aria-label="Loan eligibility"
+    >
       <fieldset className={fieldset}>
         <legend className={legend}>Loan type</legend>
-        <div className={productOptions} role="radiogroup" aria-label="Loan type">
+        <div
+          className={productOptions}
+          role="radiogroup"
+          aria-label="Loan type"
+        >
           {products.map((option) => (
-            <label className={`${productCard} ${option.id === product.id ? productCardSelected : ''}`} key={option.id}>
+            <label
+              className={`${productCard} ${
+                option.id === product.id ? productCardSelected : ""
+              }`}
+              key={option.id}
+            >
               <input
                 type="radio"
                 name="productId"
                 value={option.id}
                 checked={option.id === product.id}
                 onChange={() => {
-                  update('productId', option.id);
-                  update('loanPurpose', '');
+                  update("productId", option.id);
+                  update("loanPurpose", "");
                   onProductChange?.(option.id);
                 }}
               />
               <span className={productName}>{option.name}</span>
               <span className={productMeta}>
-                {formatCurrency(option.minAmount, { decimals: false })} – {formatCurrency(option.maxAmount, { decimals: false })} ·{' '}
-                {option.minTerm}–{option.maxTerm} months · {option.interestRateRange.min}%–{option.interestRateRange.max}%
+                {formatCurrency(option.minAmount, { decimals: false })} –{" "}
+                {formatCurrency(option.maxAmount, { decimals: false })} ·{" "}
+                {option.minTerm}–{option.maxTerm} months ·{" "}
+                {option.interestRateRange.min}%–{option.interestRateRange.max}%
               </span>
             </label>
           ))}
@@ -120,98 +167,120 @@ export function LoanForm({ products, rules, isSubmitting, onSubmit, initialProdu
       <fieldset className={fieldset}>
         <legend className={legend}>About you</legend>
         <TextField
-          {...field('age')}
+          {...field("age")}
           label="Age"
           inputMode="numeric"
           value={values.age}
-          onChange={(e) => update('age', e.target.value)}
+          onChange={(e) => update("age", e.target.value)}
         />
         <SelectField
-          {...field('employmentStatus')}
+          {...field("employmentStatus")}
           label="Employment status"
           placeholder="Select your status"
-          options={rules.personalInfo.employmentStatus.options.map((option) => ({ value: option, label: humanise(option) }))}
+          options={rules.personalInfo.employmentStatus.options.map(
+            (option) => ({ value: option, label: humanise(option) })
+          )}
           value={values.employmentStatus}
-          onChange={(e) => update('employmentStatus', e.target.value as LoanFormValues['employmentStatus'])}
+          onChange={(e) =>
+            update(
+              "employmentStatus",
+              e.target.value as LoanFormValues["employmentStatus"]
+            )
+          }
         />
         <TextField
-          {...field('employmentDuration')}
+          {...field("employmentDuration")}
           label="Months in current employment"
-          hint={isWorking ? `At least ${rules.personalInfo.employmentDuration.min} months` : 'Only needed if you’re employed'}
+          hint={
+            isWorking
+              ? `At least ${rules.personalInfo.employmentDuration.min} months`
+              : "Only needed if you’re employed"
+          }
           inputMode="numeric"
           disabled={!isWorking}
-          value={isWorking ? values.employmentDuration : ''}
-          onChange={(e) => update('employmentDuration', e.target.value)}
+          value={isWorking ? values.employmentDuration : ""}
+          onChange={(e) => update("employmentDuration", e.target.value)}
         />
       </fieldset>
 
       <fieldset className={fieldset}>
         <legend className={legend}>Your finances (per month)</legend>
         <TextField
-          {...field('monthlyIncome')}
+          {...field("monthlyIncome")}
           label="Monthly income"
           hint="Before deductions"
           inputMode="decimal"
           value={values.monthlyIncome}
-          onChange={(e) => update('monthlyIncome', e.target.value)}
+          onChange={(e) => update("monthlyIncome", e.target.value)}
         />
         <TextField
-          {...field('monthlyExpenses')}
+          {...field("monthlyExpenses")}
           label="Monthly expenses"
           hint="Rent, food, transport, school fees…"
           inputMode="decimal"
           value={values.monthlyExpenses}
-          onChange={(e) => update('monthlyExpenses', e.target.value)}
+          onChange={(e) => update("monthlyExpenses", e.target.value)}
         />
         <TextField
-          {...field('existingDebt')}
+          {...field("existingDebt")}
           label="Existing debt repayments"
           hint="Optional · what you already pay on other loans"
           inputMode="decimal"
           value={values.existingDebt}
-          onChange={(e) => update('existingDebt', e.target.value)}
+          onChange={(e) => update("existingDebt", e.target.value)}
         />
         <TextField
-          {...field('creditScore')}
+          {...field("creditScore")}
           label="Credit score"
           hint={`Optional · ${rules.financialInfo.creditScore.min}–${rules.financialInfo.creditScore.max}`}
           inputMode="numeric"
           value={values.creditScore}
-          onChange={(e) => update('creditScore', e.target.value)}
+          onChange={(e) => update("creditScore", e.target.value)}
         />
       </fieldset>
 
       <fieldset className={fieldset}>
         <legend className={legend}>The loan</legend>
         <SelectField
-          {...field('loanPurpose')}
+          {...field("loanPurpose")}
           label="What is it for?"
-          placeholder="Select a purpose"
-          options={product.purposes.map((purpose) => ({ value: purpose, label: humanise(purpose) }))}
+          placeholder="Select a reason"
+          options={product.purposes.map((purpose) => ({
+            value: purpose,
+            label: humanise(purpose),
+          }))}
           value={values.loanPurpose}
-          onChange={(e) => update('loanPurpose', e.target.value as LoanFormValues['loanPurpose'])}
+          onChange={(e) =>
+            update(
+              "loanPurpose",
+              e.target.value as LoanFormValues["loanPurpose"]
+            )
+          }
         />
         <TextField
-          {...field('requestedAmount')}
+          {...field("requestedAmount")}
           label="Loan amount"
-          hint={`${formatCurrency(product.minAmount, { decimals: false })} – ${formatCurrency(product.maxAmount, { decimals: false })}`}
+          hint={`${formatCurrency(product.minAmount, {
+            decimals: false,
+          })} – ${formatCurrency(product.maxAmount, { decimals: false })}`}
           inputMode="decimal"
           value={values.requestedAmount}
-          onChange={(e) => update('requestedAmount', e.target.value)}
+          onChange={(e) => update("requestedAmount", e.target.value)}
         />
         <TextField
-          {...field('loanTerm')}
+          {...field("loanTerm")}
           label="Loan term (months)"
           hint={`${product.minTerm}–${product.maxTerm} months`}
           inputMode="numeric"
           value={values.loanTerm}
-          onChange={(e) => update('loanTerm', e.target.value)}
+          onChange={(e) => update("loanTerm", e.target.value)}
         />
       </fieldset>
 
       {errorCount > 0 && (
         <p className={errorSummary} role="alert">
-          Please fix {errorCount === 1 ? '1 field' : `${errorCount} fields`} before checking your eligibility.
+          Please fix {errorCount === 1 ? "1 field" : `${errorCount} fields`}{" "}
+          before checking your eligibility.
         </p>
       )}
 
@@ -219,9 +288,9 @@ export function LoanForm({ products, rules, isSubmitting, onSubmit, initialProdu
         <Button
           type="submit"
           disabled={isSubmitting || !isComplete}
-          aria-describedby={isComplete ? undefined : 'loan-submit-hint'}
+          aria-describedby={isComplete ? undefined : "loan-submit-hint"}
         >
-          {isSubmitting ? 'Checking…' : 'Check my eligibility'}
+          {isSubmitting ? "Checking…" : "Check my eligibility"}
         </Button>
         <Button
           variant="secondary"
@@ -234,7 +303,11 @@ export function LoanForm({ products, rules, isSubmitting, onSubmit, initialProdu
           Use example values
         </Button>
       </div>
-      {!isComplete && <p className={submitHint} id="loan-submit-hint">Fill in all the required fields to check your eligibility.</p>}
+      {!isComplete && (
+        <p className={submitHint} id="loan-submit-hint">
+          Fill in all the required fields to check your eligibility.
+        </p>
+      )}
     </form>
   );
 }

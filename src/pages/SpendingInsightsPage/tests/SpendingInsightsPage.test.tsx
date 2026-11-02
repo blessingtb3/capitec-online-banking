@@ -1,4 +1,4 @@
-import { fireEvent, screen, within } from '@testing-library/react';
+import { act, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithProviders } from '../../../test-utils/renderWithProviders';
 import { SpendingInsightsPage } from '../SpendingInsightsPage';
@@ -105,13 +105,41 @@ describe('SpendingInsightsPage', () => {
     expect(within(activePanel()).getByLabelText('Filter by category')).toHaveValue('Dining');
   });
 
-  it('applies a custom date range to transactions', async () => {
-    await renderPage('/spending-insights?tab=transactions');
-    await userEvent.click(screen.getByRole('button', { name: 'Custom dates' }));
-    fireEvent.change(screen.getByLabelText('From'), { target: { value: '2024-07-01' } });
-    fireEvent.change(screen.getByLabelText('To'), { target: { value: '2024-07-31' } });
-    await userEvent.click(screen.getByRole('button', { name: 'Apply' }));
-    expect(await within(activePanel()).findByText('1 Jul 2024 – 31 Jul 2024')).toBeInTheDocument();
+  describe('on mobile', () => {
+    const listeners = new Set<() => void>();
+    const mediaQuery = {
+      matches: true,
+      addEventListener: (_: string, listener: () => void) => listeners.add(listener),
+      removeEventListener: (_: string, listener: () => void) => listeners.delete(listener),
+    };
+
+    beforeEach(() => {
+      mediaQuery.matches = true;
+      vi.spyOn(window, 'matchMedia').mockReturnValue(mediaQuery as unknown as MediaQueryList);
+    });
+    afterEach(() => vi.restoreAllMocks());
+
+    const presets = () => within(screen.getByRole('group', { name: 'Time period' })).getAllByRole('button');
+
+    it('limits transactions to 30 days at most', async () => {
+      await renderPage('/spending-insights?tab=transactions');
+      expect(presets().map((b) => b.textContent)).toEqual(['This month', 'Last 7 days', 'Last 30 days']);
+    });
+
+    it('limits Overview to 30 days at most', async () => {
+      await renderPage();
+      expect(presets().map((b) => b.textContent)).toEqual(['This month', 'Last 7 days', 'Last 30 days']);
+    });
+
+    it('falls back to 30 days when a longer period was picked on a wider screen', async () => {
+      mediaQuery.matches = false;
+      await renderPage();
+      await userEvent.click(screen.getByRole('button', { name: 'Last year' }));
+
+      mediaQuery.matches = true;
+      act(() => listeners.forEach((listener) => listener()));
+      expect(screen.getByRole('button', { name: 'Last 30 days' })).toHaveAttribute('aria-pressed', 'true');
+    });
   });
 
   it('updates the tiles and categories together when the period changes', async () => {
