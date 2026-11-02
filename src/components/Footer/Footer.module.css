@@ -1,0 +1,70 @@
+.footerBar {
+  display: grid;
+  gap: var(--space-lg);
+  padding: var(--space-xl) var(--space-md);
+  border-top: 1px solid var(--color-border);
+  color: var(--color-footer-text);
+}
+
+.logo {
+  display: block;
+  width: 132px;
+  height: auto;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-lg);
+}
+
+.heading {
+  margin-bottom: var(--space-md);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-footer-text);
+}
+
+.linkList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.footerLink {
+  font-size: var(--font-size-lg);
+  color: var(--color-footer-text);
+  text-decoration: none;
+}
+
+.footerLink:hover {
+  text-decoration: underline;
+}
+
+.disclaimer {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+@media (min-width: 720px) {
+  .footerBar {
+    padding: var(--space-xl) var(--space-lg);
+  }
+
+  .columns {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .footerBar {
+    gap: var(--space-xl);
+    /* Lines up with the page content; the top border stays full width. */
+    padding: var(--space-xl) max(var(--space-lg), calc((100% - var(--layout-max-width)) / 2));
+  }
+
+  /* The first four columns share the width; the last hugs the right edge. */
+  .columns {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+  }
+}

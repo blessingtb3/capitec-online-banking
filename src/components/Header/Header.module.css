@@ -1,0 +1,98 @@
+.headerBar {
+  background: var(--color-background);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/*
+ * Spans the full window width (unlike the page content), so the logo and the
+ * greeting sit at the far left and right, as on the brand site.
+ */
+.headerInner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm) var(--space-lg);
+  padding: var(--space-sm) var(--space-md);
+}
+
+@media (min-width: 720px) {
+  .headerInner {
+    flex-wrap: nowrap;
+    min-height: 76px;
+    padding: 0 var(--space-lg);
+  }
+}
+
+@media (min-width: 1024px) {
+  .headerInner {
+    gap: var(--space-xxl);
+    padding: 0 var(--space-xl);
+  }
+}
+
+.brandLink {
+  display: inline-flex;
+  flex-shrink: 0;
+  border-radius: 4px;
+}
+
+/*
+ * capitec-logo.png is a 600×600 transparent canvas with the logo in a
+ * 542×81 strip (top-left at 29, 259). We show just that strip, so the logo
+ * fills its space and lines up with the page edge.
+ */
+.logoFrame {
+  --logo-height: 24px;
+  --logo-scale: calc(var(--logo-height) / 81);
+
+  position: relative;
+  display: block;
+  overflow: hidden;
+  width: calc(542 * var(--logo-scale));
+  height: var(--logo-height);
+}
+
+@media (min-width: 720px) {
+  .logoFrame {
+    --logo-height: 30px;
+  }
+}
+
+.logoFrame img {
+  position: absolute;
+  max-width: none;
+  width: calc(600 * var(--logo-scale));
+  height: calc(600 * var(--logo-scale));
+  left: calc(-29 * var(--logo-scale));
+  top: calc(-259 * var(--logo-scale));
+}
+
+/* Sits on its own row on mobile, inline on wider screens. */
+.navSlot {
+  order: 3;
+  width: 100%;
+}
+
+@media (min-width: 720px) {
+  .navSlot {
+    order: 0;
+    width: auto;
+  }
+}
+
+.greeting {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-left: auto;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.profileIcon {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  color: var(--color-text-muted);
+}

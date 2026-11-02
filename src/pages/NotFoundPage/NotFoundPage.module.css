@@ -1,0 +1,13 @@
+.homeLink {
+  display: inline-flex;
+  padding: 10px 24px;
+  border-radius: var(--radius-pill);
+  background: var(--color-primary-button-background);
+  color: var(--color-on-primary);
+  font-weight: var(--font-weight-bold);
+  text-decoration: none;
+}
+
+.homeLink:hover {
+  background: var(--color-button-hover-background);
+}

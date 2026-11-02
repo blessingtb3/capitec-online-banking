@@ -1,0 +1,19 @@
+/*
+ * Both photos sit in the same 16:10 frame, cropped from the centre, so the
+ * card below doesn't jump when the loan type changes. Desktop only, like the
+ * illustration on the Loan products tab.
+ */
+.photo {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .photo {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    object-position: center;
+    border-radius: var(--radius-lg);
+  }
+}

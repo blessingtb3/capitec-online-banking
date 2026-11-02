@@ -1,0 +1,4 @@
+/* Line icon that takes its colour from the surrounding text (currentColor). */
+.svg {
+  flex-shrink: 0;
+}

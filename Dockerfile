@@ -6,15 +6,14 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 
-# ---------- 2. Run unit tests (docker build --target test .) ----------
+# ---------- 2. Type check + unit tests (docker build --target test .) ----------
 FROM deps AS test
 COPY . .
-RUN npm run test:run
+RUN npm run typecheck && npm run test:run
 
-# ---------- 3. Build the production bundle ----------
-FROM deps AS build
-COPY . .
-RUN npm run build
+# ---------- 3. Build the production bundle (only after tests pass) ----------
+FROM test AS build
+RUN npx vite build
 
 # ---------- 4. Serve the static site with nginx ----------
 FROM nginx:stable-alpine AS runtime

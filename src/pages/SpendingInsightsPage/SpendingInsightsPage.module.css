@@ -1,0 +1,15 @@
+.filterRow {
+  margin-bottom: var(--space-lg);
+}
+
+.overviewStack {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+/* Wraps the summary tiles, including their loading and error states, to hide them on mobile. */
+@media (max-width: 719px) {
+  .summaryTiles {
+    display: none;
+  }
+}

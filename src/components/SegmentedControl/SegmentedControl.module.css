@@ -1,0 +1,33 @@
+.group {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-muted);
+}
+
+.optionButton {
+  min-height: 36px;
+  padding: 6px 14px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+}
+
+.optionButton:hover {
+  background: var(--color-primary-tint);
+}
+
+.optionButtonSelected {
+  background: var(--color-primary-button-background);
+  color: var(--color-on-primary);
+}
+
+.optionButtonSelected:hover {
+  background: var(--color-button-hover-background);
+}

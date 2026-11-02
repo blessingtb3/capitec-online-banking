@@ -1,0 +1,46 @@
+/* Chips in the grey band, like the Transact / Save / Insure strip on the brand site. */
+.tabList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+@media (min-width: 720px) {
+  .tabList {
+    gap: var(--space-sm);
+  }
+}
+
+/* Plain white chips: the active tab and a hovered tab are shown by blue text only. */
+.tabButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  padding: 7px var(--space-sm);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--color-background);
+  color: var(--color-text);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.tabButton:hover,
+.tabButtonActive {
+  color: var(--color-link-text);
+}
+
+@media (min-width: 720px) {
+  .tabButton {
+    gap: var(--space-xs);
+    padding: 7px var(--space-md);
+  }
+}
+
+.panel:focus-visible {
+  border-radius: var(--radius-md);
+}

@@ -1,0 +1,33 @@
+.columns {
+  display: grid;
+  gap: var(--space-lg);
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .columns {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  }
+}
+
+/* Loan photo with the estimate card underneath. */
+.resultColumn {
+  display: grid;
+  gap: var(--space-lg);
+  align-content: start;
+}
+
+.placeholder {
+  display: grid;
+  gap: var(--space-xs);
+  padding: var(--space-xl) var(--space-md);
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.scheduleTitle {
+  margin-bottom: var(--space-xs);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-heavy);
+  color: var(--color-heading);
+}

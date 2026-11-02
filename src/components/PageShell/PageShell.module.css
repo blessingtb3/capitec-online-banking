@@ -1,0 +1,51 @@
+.hero,
+.bandInner,
+.content {
+  width: 100%;
+  max-width: calc(var(--layout-max-width) + 2 * var(--space-lg));
+  margin: 0 auto;
+  padding-left: var(--space-md);
+  padding-right: var(--space-md);
+}
+
+@media (min-width: 720px) {
+  .hero,
+  .bandInner,
+  .content {
+    padding-left: var(--space-lg);
+    padding-right: var(--space-lg);
+  }
+}
+
+.hero {
+  display: grid;
+  gap: var(--space-sm);
+  padding-top: var(--space-xl);
+  padding-bottom: var(--space-lg);
+}
+
+.pageTitle {
+  font-size: var(--font-size-display);
+  font-weight: var(--font-weight-heavy);
+  line-height: 1.1;
+}
+
+.pageLead {
+  max-width: 40em;
+  font-size: var(--font-size-lg);
+}
+
+/* Full-width grey strip holding the page's tabs. */
+.band {
+  background: var(--color-surface-muted);
+}
+
+.bandInner {
+  padding-top: var(--space-sm);
+  padding-bottom: var(--space-sm);
+}
+
+/* The heading above already provides the top spacing. */
+.content {
+  padding-bottom: var(--space-xxl);
+}

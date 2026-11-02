@@ -1,0 +1,94 @@
+.form {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.fieldset {
+  display: grid;
+  gap: var(--space-md);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+@media (min-width: 720px) {
+  .fieldset {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.legend {
+  margin-bottom: var(--space-sm);
+  padding: 0;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-heavy);
+  color: var(--color-heading);
+}
+
+.productOptions {
+  display: grid;
+  gap: var(--space-sm);
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 720px) {
+  .productOptions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.productCard {
+  display: grid;
+  gap: 2px;
+  padding: var(--space-md);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-background);
+  cursor: pointer;
+}
+
+.productCardSelected {
+  border-color: var(--color-primary-button-background);
+  background: var(--color-primary-tint);
+}
+
+.productCard:focus-within {
+  box-shadow: 0 0 0 3px var(--color-focus-ring);
+}
+
+.productCard input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.productName {
+  font-weight: var(--font-weight-heavy);
+}
+
+.productMeta {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.errorSummary {
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  background: var(--color-error-background);
+  color: var(--color-error);
+  font-weight: var(--font-weight-bold);
+}
+
+/* Explains why the submit button is disabled. */
+.submitHint {
+  margin-top: calc(-1 * var(--space-sm));
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
