@@ -8,7 +8,7 @@ import { useGetSpendingTrendsQuery } from '../../../services/spendingApi';
 import { colors } from '../../../theme/tokens';
 import { formatCurrency, formatMonth } from '../../../utils/format';
 import { getErrorMessage } from '../../../utils/getErrorMessage';
-import { ChartArea } from './SpendingTrendsChart.styles';
+import styles from './SpendingTrendsChart.module.css';
 
 const MONTH_OPTIONS = [
   { value: 6, label: '6M' },
@@ -17,6 +17,7 @@ const MONTH_OPTIONS = [
 ];
 
 export function SpendingTrendsChart({ customerId }: { customerId: string }) {
+  const { chartArea } = styles;
   const [months, setMonths] = useState(12);
   const { data, isLoading, isFetching, isError, error, refetch } = useGetSpendingTrendsQuery({ customerId, months });
 
@@ -27,7 +28,7 @@ export function SpendingTrendsChart({ customerId }: { customerId: string }) {
     }
     const { trends } = data;
     return (
-      <ChartArea aria-busy={isFetching}>
+      <div className={chartArea} aria-busy={isFetching}>
         <Bar
           aria-label={`Monthly spending for the last ${months} months`}
           data={{
@@ -70,7 +71,7 @@ export function SpendingTrendsChart({ customerId }: { customerId: string }) {
             },
           }}
         />
-      </ChartArea>
+      </div>
     );
   };
 

@@ -1,5 +1,6 @@
 import { ROUTES } from '../../config/routes';
-import { NavItem, NavList } from './MainNav.styles';
+import { NavLink } from 'react-router';
+import styles from './MainNav.module.css';
 
 const LINKS = [
   { to: ROUTES.spendingInsights, label: 'Spending insights' },
@@ -8,15 +9,16 @@ const LINKS = [
 
 /** Links between the app's pages. NavLink sets aria-current="page" on the active one. */
 export function MainNav() {
+  const { navList, navItem } = styles;
   return (
     <nav aria-label="Main">
-      <NavList>
+      <ul className={navList}>
         {LINKS.map((link) => (
           <li key={link.to}>
-            <NavItem to={link.to}>{link.label}</NavItem>
+            <NavLink className={navItem} to={link.to}>{link.label}</NavLink>
           </li>
         ))}
-      </NavList>
+      </ul>
     </nav>
   );
 }

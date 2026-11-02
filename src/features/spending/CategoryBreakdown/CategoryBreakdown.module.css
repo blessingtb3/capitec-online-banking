@@ -1,0 +1,84 @@
+.layout {
+  display: grid;
+  gap: var(--space-lg);
+  align-items: center;
+}
+
+@media (min-width: 720px) {
+  .layout {
+    grid-template-columns: minmax(160px, 220px) minmax(0, 620px);
+    gap: var(--space-xl);
+  }
+}
+
+.chartWrap {
+  position: relative;
+  max-width: 220px;
+  width: 100%;
+  margin: 0 auto;
+  aspect-ratio: 1;
+}
+
+/* The total, printed in the doughnut's hole. */
+.centerLabel {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  pointer-events: none;
+}
+
+.centerCaption {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-muted);
+}
+
+.centerValue {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-heavy);
+  color: var(--color-heading);
+}
+
+.list {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-sm);
+  width: 100%;
+  padding: var(--space-xs) 10px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.row:hover,
+.rowSelected {
+  background: var(--color-primary-tint);
+}
+
+.categoryName {
+  font-weight: var(--font-weight-bold);
+}
+
+.meta {
+  display: block;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.categoryAmount {
+  font-weight: var(--font-weight-heavy);
+  font-variant-numeric: tabular-nums;
+}

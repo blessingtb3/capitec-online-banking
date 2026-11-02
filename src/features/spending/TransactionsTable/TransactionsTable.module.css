@@ -1,0 +1,143 @@
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+/* Beats .select from FormField whichever stylesheet loads first. */
+.toolbar .toolbarSelect {
+  width: auto;
+  flex: 1 1 200px;
+}
+
+@media (min-width: 720px) {
+  .toolbar .toolbarSelect {
+    flex: 0 1 220px;
+  }
+}
+
+/* Visually hidden but available to screen readers. */
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-md);
+}
+
+.table th {
+  padding: 0 var(--space-sm) 10px;
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.table td {
+  padding: 14px var(--space-sm);
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* Mobile: each row becomes a compact two-column card. */
+@media (max-width: 719px) {
+  .table thead {
+    display: none;
+  }
+
+  .table tbody tr {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 2px var(--space-sm);
+    padding: var(--space-sm) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .table tbody td {
+    padding: 0;
+    border: 0;
+  }
+
+  .table td[data-column='merchant'] {
+    grid-row: 1 / 3;
+  }
+
+  .table td[data-column='amount'] {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .table td[data-column='date'] {
+    grid-column: 2;
+    grid-row: 2;
+    text-align: right;
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+  }
+
+  .table td[data-column='category'],
+  .table td[data-column='method'] {
+    display: none;
+  }
+}
+
+.merchantName {
+  display: block;
+  font-weight: var(--font-weight-bold);
+}
+
+.merchantDescription {
+  display: block;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-muted);
+}
+
+.muted {
+  color: var(--color-text-muted);
+}
+
+.table .amountHeader {
+  text-align: right;
+}
+
+.amountCell {
+  text-align: right;
+  font-weight: var(--font-weight-heavy);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.paginationBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.pageButtons {
+  display: flex;
+  gap: var(--space-xs);
+}

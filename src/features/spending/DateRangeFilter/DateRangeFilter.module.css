@@ -1,0 +1,41 @@
+.filterBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.customForm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-sm);
+  width: 100%;
+  margin-top: var(--space-xs);
+}
+
+.dateLabel {
+  display: grid;
+  gap: 4px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+}
+
+/* Beats .input from FormField whichever stylesheet loads first. */
+.customForm .dateInput {
+  width: auto;
+  min-height: 40px;
+}
+
+.activeRange {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-muted);
+}
+
+.errorText {
+  width: 100%;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-error);
+}

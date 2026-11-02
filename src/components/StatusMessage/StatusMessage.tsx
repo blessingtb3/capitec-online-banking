@@ -1,5 +1,5 @@
 import { Button } from '../Button/Button';
-import { IconCircle, Message, Spinner, Title, Wrapper } from './StatusMessage.styles';
+import styles from './StatusMessage.module.css';
 
 type StatusMessageProps =
   | { variant: 'loading'; title?: string }
@@ -8,39 +8,48 @@ type StatusMessageProps =
 
 /** One component for the loading, error and empty states used across the app. */
 export function StatusMessage(props: StatusMessageProps) {
+  const {
+    wrapper,
+    spinner,
+    statusMessage,
+    iconCircle,
+    iconCircleError,
+    statusTitle,
+    iconCircleNeutral,
+  } = styles;
   if (props.variant === 'loading') {
     return (
-      <Wrapper role="status" aria-live="polite">
-        <Spinner aria-hidden="true" />
-        <Message>{props.title ?? 'Loading…'}</Message>
-      </Wrapper>
+      <div className={wrapper} role="status" aria-live="polite">
+        <span className={spinner} aria-hidden="true" />
+        <p className={statusMessage}>{props.title ?? 'Loading…'}</p>
+      </div>
     );
   }
 
   if (props.variant === 'error') {
     return (
-      <Wrapper role="alert">
-        <IconCircle $tone="error" aria-hidden="true">
+      <div className={wrapper} role="alert">
+        <span className={`${iconCircle} ${iconCircleError}`} aria-hidden="true">
           !
-        </IconCircle>
-        <Title>{props.title ?? 'Something went wrong'}</Title>
-        <Message>{props.message}</Message>
+        </span>
+        <h3 className={statusTitle}>{props.title ?? 'Something went wrong'}</h3>
+        <p className={statusMessage}>{props.message}</p>
         {props.onRetry && (
           <Button size="sm" onClick={props.onRetry}>
             Try again
           </Button>
         )}
-      </Wrapper>
+      </div>
     );
   }
 
   return (
-    <Wrapper>
-      <IconCircle $tone="neutral" aria-hidden="true">
+    <div className={wrapper}>
+      <span className={`${iconCircle} ${iconCircleNeutral}`} aria-hidden="true">
         ∅
-      </IconCircle>
-      <Title>{props.title}</Title>
-      {props.message && <Message>{props.message}</Message>}
-    </Wrapper>
+      </span>
+      <h3 className={statusTitle}>{props.title}</h3>
+      {props.message && <p className={statusMessage}>{props.message}</p>}
+    </div>
   );
 }

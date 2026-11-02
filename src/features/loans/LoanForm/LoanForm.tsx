@@ -4,18 +4,7 @@ import { SelectField, TextField } from '../../../components/FormField/FormField'
 import type { EligibilityRequest, LoanProduct, LoanProductId, ValidationRules } from '../../../types/loans';
 import { formatCurrency, humanise } from '../../../utils/format';
 import { validateLoanApplication, type LoanErrors, type LoanField } from '../../../utils/validateLoanApplication';
-import {
-  Actions,
-  ErrorSummary,
-  Fieldset,
-  Form,
-  Legend,
-  ProductCard,
-  ProductMeta,
-  ProductName,
-  ProductOptions,
-  SubmitHint,
-} from './LoanForm.styles';
+import styles from './LoanForm.module.css';
 import { EMPTY_VALUES, EXAMPLE_VALUES, isFormComplete, toEligibilityRequest, type LoanFormValues } from './loanFormValues';
 
 /** Field order on screen, used to focus the first invalid field. */
@@ -46,6 +35,19 @@ interface LoanFormProps {
 }
 
 export function LoanForm({ products, rules, isSubmitting, onSubmit, initialProductId, onProductChange }: LoanFormProps) {
+  const {
+    form,
+    fieldset,
+    legend,
+    productOptions,
+    productCard,
+    productCardSelected,
+    productName,
+    productMeta,
+    errorSummary,
+    actions,
+    submitHint,
+  } = styles;
   const [values, setValues] = useState<LoanFormValues>({
     ...EMPTY_VALUES,
     productId: initialProductId ?? EMPTY_VALUES.productId,
@@ -88,12 +90,12 @@ export function LoanForm({ products, rules, isSubmitting, onSubmit, initialProdu
   });
 
   return (
-    <Form onSubmit={handleSubmit} noValidate aria-label="Loan eligibility">
-      <Fieldset>
-        <Legend>Loan type</Legend>
-        <ProductOptions role="radiogroup" aria-label="Loan type">
+    <form className={form} onSubmit={handleSubmit} noValidate aria-label="Loan eligibility">
+      <fieldset className={fieldset}>
+        <legend className={legend}>Loan type</legend>
+        <div className={productOptions} role="radiogroup" aria-label="Loan type">
           {products.map((option) => (
-            <ProductCard key={option.id} $selected={option.id === product.id}>
+            <label className={`${productCard} ${option.id === product.id ? productCardSelected : ''}`} key={option.id}>
               <input
                 type="radio"
                 name="productId"
@@ -105,18 +107,18 @@ export function LoanForm({ products, rules, isSubmitting, onSubmit, initialProdu
                   onProductChange?.(option.id);
                 }}
               />
-              <ProductName>{option.name}</ProductName>
-              <ProductMeta>
+              <span className={productName}>{option.name}</span>
+              <span className={productMeta}>
                 {formatCurrency(option.minAmount, { decimals: false })} – {formatCurrency(option.maxAmount, { decimals: false })} ·{' '}
                 {option.minTerm}–{option.maxTerm} months · {option.interestRateRange.min}%–{option.interestRateRange.max}%
-              </ProductMeta>
-            </ProductCard>
+              </span>
+            </label>
           ))}
-        </ProductOptions>
-      </Fieldset>
+        </div>
+      </fieldset>
 
-      <Fieldset>
-        <Legend>About you</Legend>
+      <fieldset className={fieldset}>
+        <legend className={legend}>About you</legend>
         <TextField
           {...field('age')}
           label="Age"
@@ -141,10 +143,10 @@ export function LoanForm({ products, rules, isSubmitting, onSubmit, initialProdu
           value={isWorking ? values.employmentDuration : ''}
           onChange={(e) => update('employmentDuration', e.target.value)}
         />
-      </Fieldset>
+      </fieldset>
 
-      <Fieldset>
-        <Legend>Your finances (per month)</Legend>
+      <fieldset className={fieldset}>
+        <legend className={legend}>Your finances (per month)</legend>
         <TextField
           {...field('monthlyIncome')}
           label="Monthly income"
@@ -177,10 +179,10 @@ export function LoanForm({ products, rules, isSubmitting, onSubmit, initialProdu
           value={values.creditScore}
           onChange={(e) => update('creditScore', e.target.value)}
         />
-      </Fieldset>
+      </fieldset>
 
-      <Fieldset>
-        <Legend>The loan</Legend>
+      <fieldset className={fieldset}>
+        <legend className={legend}>The loan</legend>
         <SelectField
           {...field('loanPurpose')}
           label="What is it for?"
@@ -205,15 +207,15 @@ export function LoanForm({ products, rules, isSubmitting, onSubmit, initialProdu
           value={values.loanTerm}
           onChange={(e) => update('loanTerm', e.target.value)}
         />
-      </Fieldset>
+      </fieldset>
 
       {errorCount > 0 && (
-        <ErrorSummary role="alert">
+        <p className={errorSummary} role="alert">
           Please fix {errorCount === 1 ? '1 field' : `${errorCount} fields`} before checking your eligibility.
-        </ErrorSummary>
+        </p>
       )}
 
-      <Actions>
+      <div className={actions}>
         <Button
           type="submit"
           disabled={isSubmitting || !isComplete}
@@ -231,8 +233,8 @@ export function LoanForm({ products, rules, isSubmitting, onSubmit, initialProdu
         >
           Use example values
         </Button>
-      </Actions>
-      {!isComplete && <SubmitHint id="loan-submit-hint">Fill in all the required fields to check your eligibility.</SubmitHint>}
-    </Form>
+      </div>
+      {!isComplete && <p className={submitHint} id="loan-submit-hint">Fill in all the required fields to check your eligibility.</p>}
+    </form>
   );
 }

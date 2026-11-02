@@ -3,13 +3,14 @@ import '../../../charts/chartSetup';
 import { colors } from '../../../theme/tokens';
 import type { PaymentScheduleRow } from '../../../types/loans';
 import { formatCurrency } from '../../../utils/format';
-import { ChartArea, Details, ScheduleTable, ScrollArea } from './RepaymentSchedule.styles';
+import styles from './RepaymentSchedule.module.css';
 
 /** Stacked bars of interest vs capital per month, plus the full table. */
 export function RepaymentSchedule({ schedule }: { schedule: PaymentScheduleRow[] }) {
+  const { chartArea, details, scrollArea, scheduleTable } = styles;
   return (
     <div>
-      <ChartArea>
+      <div className={chartArea}>
         <Bar
           aria-label="Monthly repayment split between capital and interest"
           data={{
@@ -48,12 +49,12 @@ export function RepaymentSchedule({ schedule }: { schedule: PaymentScheduleRow[]
             },
           }}
         />
-      </ChartArea>
+      </div>
 
-      <Details>
+      <details className={details}>
         <summary>View full repayment schedule</summary>
-        <ScrollArea>
-          <ScheduleTable>
+        <div className={scrollArea}>
+          <table className={scheduleTable}>
             <thead>
               <tr>
                 <th scope="col">Month</th>
@@ -74,9 +75,9 @@ export function RepaymentSchedule({ schedule }: { schedule: PaymentScheduleRow[]
                 </tr>
               ))}
             </tbody>
-          </ScheduleTable>
-        </ScrollArea>
-      </Details>
+          </table>
+        </div>
+      </details>
     </div>
   );
 }

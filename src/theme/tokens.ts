@@ -1,6 +1,8 @@
 /**
  * Design tokens: the single source of truth for colours, spacing and type.
- * Styles files import from here; components never hard-code a hex value.
+ * CSS Modules read them as CSS variables (see applyTokens); charts import them directly.
+ * Components never hard-code a hex value. Breakpoints are written in the CSS itself,
+ * because media queries can't use variables: tablet is 720px, desktop is 1024px.
  */
 
 export const colors = {
@@ -75,12 +77,6 @@ export const radii = {
 
 export const shadows = {
   card: '0 1px 2px rgba(16, 24, 40, 0.04), 0 4px 16px rgba(16, 24, 40, 0.06)',
-} as const;
-
-/** Min-width media queries, mobile first. */
-export const media = {
-  tablet: '@media (min-width: 720px)',
-  desktop: '@media (min-width: 1024px)',
 } as const;
 
 export const layout = {

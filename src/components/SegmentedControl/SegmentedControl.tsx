@@ -1,4 +1,4 @@
-import { Group, Option } from './SegmentedControl.styles';
+import styles from './SegmentedControl.module.css';
 
 interface SegmentedControlProps<T extends string | number> {
   label: string;
@@ -9,19 +9,20 @@ interface SegmentedControlProps<T extends string | number> {
 
 /** A row of mutually exclusive toggle buttons (e.g. 7d / 30d / 90d / 1y). */
 export function SegmentedControl<T extends string | number>({ label, options, value, onChange }: SegmentedControlProps<T>) {
+  const { group, optionButton, optionButtonSelected } = styles;
   return (
-    <Group role="group" aria-label={label}>
+    <div className={group} role="group" aria-label={label}>
       {options.map((option) => (
-        <Option
+        <button
+          className={`${optionButton} ${option.value === value ? optionButtonSelected : ''}`}
           key={option.value}
           type="button"
           aria-pressed={option.value === value}
-          $selected={option.value === value}
           onClick={() => onChange(option.value)}
         >
           {option.label}
-        </Option>
+        </button>
       ))}
-    </Group>
+    </div>
   );
 }

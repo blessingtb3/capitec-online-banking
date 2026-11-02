@@ -8,7 +8,7 @@ import { EligibilityResult } from '../EligibilityResult/EligibilityResult';
 import { LoanForm } from '../LoanForm/LoanForm';
 import { RepaymentSchedule } from '../RepaymentSchedule/RepaymentSchedule';
 import { LoanProductImage } from '../LoanProductImage/LoanProductImage';
-import { Columns, Placeholder, ResultColumn, ScheduleTitle } from './EligibilityChecker.styles';
+import styles from './EligibilityChecker.module.css';
 
 interface Submission {
   request: EligibilityRequest;
@@ -23,6 +23,7 @@ interface EligibilityCheckerProps {
 
 /** Form + result. After a successful check, fetches the repayment schedule for the recommended amount. */
 export function EligibilityChecker({ products, rules, initialProductId }: EligibilityCheckerProps) {
+  const { scheduleTitle, placeholder, columns, resultColumn } = styles;
   const [selectedProductId, setSelectedProductId] = useState<LoanProductId>(initialProductId ?? products[0].id);
   const [checkEligibility, eligibility] = useCheckEligibilityMutation();
   const [calculateRate, rate] = useCalculateRateMutation();
@@ -55,7 +56,7 @@ export function EligibilityChecker({ products, rules, initialProductId }: Eligib
     if (!rate.data) return null;
     return (
       <section aria-labelledby="schedule-title">
-        <ScheduleTitle id="schedule-title">Repayment schedule</ScheduleTitle>
+        <h4 className={scheduleTitle} id="schedule-title">Repayment schedule</h4>
         <RepaymentSchedule schedule={rate.data.paymentSchedule} />
       </section>
     );
@@ -77,15 +78,15 @@ export function EligibilityChecker({ products, rules, initialProductId }: Eligib
       return <EligibilityResult result={eligibility.data} request={submission.request} schedule={renderSchedule()} />;
     }
     return (
-      <Placeholder>
+      <div className={placeholder}>
         <strong>Your estimate will appear here</strong>
         <span>Fill in your details and select “Check my eligibility”. It won’t affect your credit record.</span>
-      </Placeholder>
+      </div>
     );
   };
 
   return (
-    <Columns>
+    <div className={columns}>
       <Card id="loan-details" title="Your details" subtitle="All amounts in rands">
         <LoanForm
           products={products}
@@ -96,13 +97,13 @@ export function EligibilityChecker({ products, rules, initialProductId }: Eligib
           onSubmit={(request, product) => runCheck({ request, product })}
         />
       </Card>
-      <ResultColumn>
+      <div className={resultColumn}>
         {/* Hidden once a check starts, so the estimate takes its place. */}
         {!submission && <LoanProductImage productId={selectedProductId} />}
         <Card id="loan-result" title="Your estimate">
           <div aria-live="polite">{renderResult()}</div>
         </Card>
-      </ResultColumn>
-    </Columns>
+      </div>
+    </div>
   );
 }

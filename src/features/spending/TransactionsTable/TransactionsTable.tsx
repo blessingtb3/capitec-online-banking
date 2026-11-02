@@ -6,20 +6,8 @@ import { useGetTransactionsQuery } from '../../../services/spendingApi';
 import type { DateRange, FilterCategory, SortBy } from '../../../types/spending';
 import { formatCurrency, formatDate } from '../../../utils/format';
 import { getErrorMessage } from '../../../utils/getErrorMessage';
-import {
-  AmountCell,
-  AmountHeader,
-  Description,
-  HiddenCaption,
-  HiddenLabel,
-  Merchant,
-  Muted,
-  PageButtons,
-  Pagination,
-  Table,
-  Toolbar,
-  ToolbarSelect,
-} from './TransactionsTable.styles';
+import fieldStyles from '../../../components/FormField/FormField.module.css';
+import styles from './TransactionsTable.module.css';
 
 const PAGE_SIZE = 10;
 
@@ -44,6 +32,20 @@ interface TransactionsTableProps {
  * whenever the date range or category changes.
  */
 export function TransactionsTable({ customerId, dateRange, categories, category, onCategoryChange }: TransactionsTableProps) {
+  const {
+    table,
+    visuallyHidden,
+    amountHeader,
+    merchantName,
+    merchantDescription,
+    muted,
+    amountCell,
+    paginationBar,
+    pageButtons,
+    toolbar,
+    toolbarSelect,
+  } = styles;
+  const { select } = fieldStyles;
   const [sortBy, setSortBy] = useState<SortBy>('date_desc');
   const [offset, setOffset] = useState(0);
 
@@ -72,50 +74,50 @@ export function TransactionsTable({ customerId, dateRange, categories, category,
 
     return (
       <>
-        <Table aria-busy={isFetching}>
-          <HiddenCaption>Transactions</HiddenCaption>
+        <table className={table} aria-busy={isFetching}>
+          <caption className={visuallyHidden}>Transactions</caption>
           <thead>
             <tr>
               <th scope="col">Merchant</th>
               <th scope="col">Category</th>
               <th scope="col">Payment method</th>
               <th scope="col">Date</th>
-              <AmountHeader scope="col">Amount</AmountHeader>
+              <th className={amountHeader} scope="col">Amount</th>
             </tr>
           </thead>
           <tbody>
             {data.transactions.map((transaction) => (
               <tr key={transaction.id}>
                 <td data-column="merchant">
-                  <Merchant>
+                  <span className={merchantName}>
                     {transaction.merchant}
-                    <Description>{transaction.description}</Description>
-                  </Merchant>
+                    <span className={merchantDescription}>{transaction.description}</span>
+                  </span>
                 </td>
                 <td data-column="category">{transaction.category}</td>
                 <td data-column="method">
-                  <Muted>{transaction.paymentMethod}</Muted>
+                  <span className={muted}>{transaction.paymentMethod}</span>
                 </td>
                 <td data-column="date">{formatDate(transaction.date)}</td>
-                <AmountCell data-column="amount">−{formatCurrency(transaction.amount)}</AmountCell>
+                <td className={amountCell} data-column="amount">−{formatCurrency(transaction.amount)}</td>
               </tr>
             ))}
           </tbody>
-        </Table>
+        </table>
 
-        <Pagination>
+        <div className={paginationBar}>
           <span aria-live="polite">
             Showing {first}–{last} of {total}
           </span>
-          <PageButtons>
+          <div className={pageButtons}>
             <Button variant="secondary" size="sm" disabled={offset === 0} onClick={() => setOffset(offset - PAGE_SIZE)}>
               Previous
             </Button>
             <Button variant="secondary" size="sm" disabled={!hasMore} onClick={() => setOffset(offset + PAGE_SIZE)}>
               Next
             </Button>
-          </PageButtons>
-        </Pagination>
+          </div>
+        </div>
       </>
     );
   };
@@ -126,9 +128,10 @@ export function TransactionsTable({ customerId, dateRange, categories, category,
       title="Transactions"
       subtitle={`${formatDate(dateRange.startDate)} – ${formatDate(dateRange.endDate)}`}
     >
-      <Toolbar>
-        <HiddenLabel htmlFor="transactions-category">Filter by category</HiddenLabel>
-        <ToolbarSelect
+      <div className={toolbar}>
+        <label className={visuallyHidden} htmlFor="transactions-category">Filter by category</label>
+        <select
+          className={`${select} ${toolbarSelect}`}
           id="transactions-category"
           value={category ?? ''}
           onChange={(event) => onCategoryChange(event.target.value || null)}
@@ -139,9 +142,10 @@ export function TransactionsTable({ customerId, dateRange, categories, category,
               {c.name}
             </option>
           ))}
-        </ToolbarSelect>
-        <HiddenLabel htmlFor="transactions-sort">Sort transactions</HiddenLabel>
-        <ToolbarSelect
+        </select>
+        <label className={visuallyHidden} htmlFor="transactions-sort">Sort transactions</label>
+        <select
+          className={`${select} ${toolbarSelect}`}
           id="transactions-sort"
           value={sortBy}
           onChange={(event) => {
@@ -154,8 +158,8 @@ export function TransactionsTable({ customerId, dateRange, categories, category,
               {option.label}
             </option>
           ))}
-        </ToolbarSelect>
-      </Toolbar>
+        </select>
+      </div>
       {renderBody()}
     </Card>
   );

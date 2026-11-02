@@ -3,7 +3,8 @@ import { Button } from '../../../components/Button/Button';
 import { SegmentedControl } from '../../../components/SegmentedControl/SegmentedControl';
 import type { DateRange, DateRangePreset, Period } from '../../../types/spending';
 import { formatDate } from '../../../utils/format';
-import { ActiveRange, CustomForm, DateInput, DateLabel, ErrorText, FilterBar } from './DateRangeFilter.styles';
+import fieldStyles from '../../../components/FormField/FormField.module.css';
+import styles from './DateRangeFilter.module.css';
 
 interface DateRangeFilterProps {
   presets: DateRangePreset[];
@@ -24,6 +25,8 @@ export function DateRangeFilter({
   onCustomRangeChange,
   allowCustom = true,
 }: DateRangeFilterProps) {
+  const { filterBar, activeRange, customForm, dateLabel, dateInput, errorText } = styles;
+  const { input } = fieldStyles;
   const [showCustom, setShowCustom] = useState(customRange !== null);
   const [startDate, setStartDate] = useState(customRange?.startDate ?? '');
   const [endDate, setEndDate] = useState(customRange?.endDate ?? '');
@@ -47,7 +50,7 @@ export function DateRangeFilter({
 
   return (
     <div>
-      <FilterBar>
+      <div className={filterBar}>
         <SegmentedControl
           label="Time period"
           options={presets.map((preset) => ({ value: preset.value, label: preset.label }))}
@@ -63,31 +66,31 @@ export function DateRangeFilter({
           </Button>
         )}
         {allowCustom && customRange && (
-          <ActiveRange>
+          <p className={activeRange}>
             Showing {formatDate(customRange.startDate)} – {formatDate(customRange.endDate)}
-          </ActiveRange>
+          </p>
         )}
-        {!allowCustom && customRange && <ActiveRange>Your custom dates apply to the Transactions tab only.</ActiveRange>}
-      </FilterBar>
+        {!allowCustom && customRange && <p className={activeRange}>Your custom dates apply to the Transactions tab only.</p>}
+      </div>
 
       {allowCustom && showCustom && (
-        <CustomForm onSubmit={applyCustomRange} aria-label="Custom date range" noValidate>
-          <DateLabel>
+        <form className={customForm} onSubmit={applyCustomRange} aria-label="Custom date range" noValidate>
+          <label className={dateLabel}>
             From
-            <DateInput type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
-          </DateLabel>
-          <DateLabel>
+            <input className={`${input} ${dateInput}`} type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+          </label>
+          <label className={dateLabel}>
             To
-            <DateInput type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
-          </DateLabel>
+            <input className={`${input} ${dateInput}`} type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+          </label>
           <Button type="submit" size="sm">
             Apply
           </Button>
           <Button variant="secondary" size="sm" onClick={clearCustomRange}>
             Cancel
           </Button>
-          {error && <ErrorText role="alert">{error}</ErrorText>}
-        </CustomForm>
+          {error && <p className={errorText} role="alert">{error}</p>}
+        </form>
       )}
     </div>
   );

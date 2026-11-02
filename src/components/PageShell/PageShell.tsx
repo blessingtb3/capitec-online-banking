@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Band, BandInner, Content, Hero, Lead, Title } from './PageShell.styles';
+import styles from './PageShell.module.css';
 
 interface PageShellProps {
   /** Shown in the browser tab (React 19 hoists <title> into <head>). */
@@ -13,19 +13,20 @@ interface PageShellProps {
 
 /** Common page layout: grey tab band (directly under the header), heading, content. */
 export function PageShell({ documentTitle, title, lead, tabs, children }: PageShellProps) {
+  const { band, bandInner, hero, pageTitle, pageLead, content } = styles;
   return (
     <>
       <title>{documentTitle}</title>
       {tabs && (
-        <Band>
-          <BandInner>{tabs}</BandInner>
-        </Band>
+        <div className={band}>
+          <div className={bandInner}>{tabs}</div>
+        </div>
       )}
-      <Hero aria-labelledby="page-title">
-        <Title id="page-title">{title}</Title>
-        {lead && <Lead>{lead}</Lead>}
-      </Hero>
-      <Content>{children}</Content>
+      <section className={hero} aria-labelledby="page-title">
+        <h1 className={pageTitle} id="page-title">{title}</h1>
+        {lead && <p className={pageLead}>{lead}</p>}
+      </section>
+      <div className={content}>{children}</div>
     </>
   );
 }

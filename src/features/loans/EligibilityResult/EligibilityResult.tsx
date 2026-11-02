@@ -2,23 +2,7 @@ import type { ReactNode } from 'react';
 import { ProgressBar } from '../../../components/ProgressBar/ProgressBar';
 import type { EligibilityRequest, EligibilityResponse } from '../../../types/loans';
 import { formatCurrency, formatPercent, humanise } from '../../../utils/format';
-import {
-  Banner,
-  BannerIcon,
-  BannerText,
-  BannerTitle,
-  Disclaimer,
-  Facts,
-  HeroFigure,
-  HeroLabel,
-  HeroNote,
-  HeroValue,
-  LikelihoodHead,
-  RiskBadge,
-  RiskLine,
-  SectionTitle,
-  Wrapper,
-} from './EligibilityResult.styles';
+import styles from './EligibilityResult.module.css';
 
 interface EligibilityResultProps {
   result: EligibilityResponse;
@@ -28,54 +12,75 @@ interface EligibilityResultProps {
 }
 
 export function EligibilityResult({ result, request, schedule }: EligibilityResultProps) {
+  const {
+    wrapper,
+    banner,
+    bannerEligible,
+    bannerIneligible,
+    bannerIcon,
+    bannerIconEligible,
+    bannerIconIneligible,
+    bannerTitle,
+    bannerText,
+    likelihoodHead,
+    riskLine,
+    riskBadge,
+    heroFigure,
+    heroLabel,
+    heroValue,
+    heroNote,
+    sectionTitle,
+    facts,
+    disclaimer,
+  } = styles;
   const { eligibilityResult, recommendedLoan, affordabilityAnalysis } = result;
   const { isEligible } = eligibilityResult;
   const reduced = recommendedLoan.recommendedAmount > 0 && recommendedLoan.recommendedAmount < request.loanDetails.requestedAmount;
   const likelihoodTone = eligibilityResult.approvalLikelihood >= 75 ? 'success' : eligibilityResult.approvalLikelihood >= 50 ? 'warning' : 'error';
 
   return (
-    <Wrapper>
-      <Banner $eligible={isEligible}>
-        <BannerIcon $eligible={isEligible} aria-hidden="true">
+    <div className={wrapper}>
+      <div className={`${banner} ${isEligible ? bannerEligible : bannerIneligible}`}>
+        <span className={`${bannerIcon} ${isEligible ? bannerIconEligible : bannerIconIneligible}`} aria-hidden="true">
           {isEligible ? '✓' : '!'}
-        </BannerIcon>
+        </span>
         <div>
-          <BannerTitle>{isEligible ? 'You’re likely to qualify' : 'You’re unlikely to qualify right now'}</BannerTitle>
-          <BannerText>{eligibilityResult.decisionReason}.</BannerText>
+          <h3 className={bannerTitle}>{isEligible ? 'You’re likely to qualify' : 'You’re unlikely to qualify right now'}</h3>
+          <p className={bannerText}>{eligibilityResult.decisionReason}.</p>
         </div>
-      </Banner>
+      </div>
 
       <div>
-        <LikelihoodHead>
+        <div className={likelihoodHead}>
           <span>Approval likelihood</span>
           <span>{eligibilityResult.approvalLikelihood}%</span>
-        </LikelihoodHead>
+        </div>
         <ProgressBar
           value={eligibilityResult.approvalLikelihood}
           tone={likelihoodTone}
           label="Approval likelihood"
           valueText={`${eligibilityResult.approvalLikelihood}%, ${eligibilityResult.riskCategory} risk`}
         />
-        <RiskLine>
-          Risk category: <RiskBadge $risk={eligibilityResult.riskCategory}>{humanise(eligibilityResult.riskCategory)}</RiskBadge>
-        </RiskLine>
+        <p className={riskLine}>
+          Risk category: <span className={`${riskBadge} ${styles[eligibilityResult.riskCategory]}`}>{humanise(eligibilityResult.riskCategory)}</span>
+        </p>
       </div>
 
       {recommendedLoan.recommendedAmount > 0 && (
-        <HeroFigure>
-          <HeroLabel>Estimated monthly repayment</HeroLabel>
-          <HeroValue data-testid="monthly-payment">{formatCurrency(recommendedLoan.monthlyPayment)}</HeroValue>
-          <HeroNote>
+        <div className={heroFigure}>
+          <p className={heroLabel}>Estimated monthly repayment</p>
+          <p className={heroValue} data-testid="monthly-payment">{formatCurrency(recommendedLoan.monthlyPayment)}</p>
+          <p className={heroNote}>
             on {formatCurrency(recommendedLoan.recommendedAmount, { decimals: false })} over {request.loanDetails.loanTerm} months
             at {formatPercent(recommendedLoan.interestRate)} a year
             {reduced && ` (you asked for ${formatCurrency(request.loanDetails.requestedAmount, { decimals: false })})`}
-          </HeroNote>
-        </HeroFigure>
+          </p>
+        </div>
       )}
 
       <section aria-labelledby="loan-offer-title">
-        <SectionTitle id="loan-offer-title">Recommended loan</SectionTitle>
-        <Facts>
+        <h4 className={sectionTitle} id="loan-offer-title">Recommended loan</h4>
+        <dl className={facts}>
           <div>
             <dt>Maximum you could borrow</dt>
             <dd>{formatCurrency(recommendedLoan.maxAmount, { decimals: false })}</dd>
@@ -92,12 +97,12 @@ export function EligibilityResult({ result, request, schedule }: EligibilityResu
             <dt>Total repayment</dt>
             <dd>{formatCurrency(recommendedLoan.totalRepayment, { decimals: false })}</dd>
           </div>
-        </Facts>
+        </dl>
       </section>
 
       <section aria-labelledby="affordability-title">
-        <SectionTitle id="affordability-title">Affordability</SectionTitle>
-        <Facts>
+        <h4 className={sectionTitle} id="affordability-title">Affordability</h4>
+        <dl className={facts}>
           <div>
             <dt>Disposable income</dt>
             <dd>{formatCurrency(affordabilityAnalysis.disposableIncome, { decimals: false })}</dd>
@@ -114,15 +119,15 @@ export function EligibilityResult({ result, request, schedule }: EligibilityResu
             <dt>Affordability</dt>
             <dd>{humanise(affordabilityAnalysis.affordabilityScore)}</dd>
           </div>
-        </Facts>
+        </dl>
       </section>
 
       {schedule}
 
-      <Disclaimer>
+      <p className={disclaimer}>
         This is an estimate based on mocked data and simplified rules. It is not a credit offer and does not affect your
         credit record.
-      </Disclaimer>
-    </Wrapper>
+      </p>
+    </div>
   );
 }

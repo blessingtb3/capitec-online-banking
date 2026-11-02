@@ -10,7 +10,7 @@ import { getErrorMessage } from '../../../utils/getErrorMessage';
 import { parseAmount } from '../../../utils/parseAmount';
 import { LoanProductImage } from '../LoanProductImage/LoanProductImage';
 import { RepaymentSchedule } from '../RepaymentSchedule/RepaymentSchedule';
-import { Facts, Form, Layout, Placeholder, ResultColumn } from './RepaymentCalculator.styles';
+import styles from './RepaymentCalculator.module.css';
 
 interface RepaymentCalculatorProps {
   products: LoanProduct[];
@@ -21,6 +21,7 @@ type Field = 'loanAmount' | 'loanTerm' | 'creditScore';
 
 /** "What would this loan cost?" Calls POST /api/loans/calculate-rate directly. */
 export function RepaymentCalculator({ products, rules }: RepaymentCalculatorProps) {
+  const { placeholder, facts, layout, form, resultColumn } = styles;
   const [productId, setProductId] = useState<LoanProductId>(products[0].id);
   const [values, setValues] = useState<Record<Field, string>>({ loanAmount: '', loanTerm: '', creditScore: '' });
   const [errors, setErrors] = useState<Partial<Record<Field, string>>>({});
@@ -63,10 +64,10 @@ export function RepaymentCalculator({ products, rules }: RepaymentCalculatorProp
   const renderResult = () => {
     if (isLoading) return <StatusMessage variant="loading" title="Calculating…" />;
     if (isError) return <StatusMessage variant="error" title="We couldn’t calculate that" message={getErrorMessage(error)} />;
-    if (!data) return <Placeholder>Enter an amount and term to see your repayments.</Placeholder>;
+    if (!data) return <p className={placeholder}>Enter an amount and term to see your repayments.</p>;
     return (
       <>
-        <Facts>
+        <dl className={facts}>
           <div>
             <dt>Monthly repayment</dt>
             <dd data-testid="calc-monthly-payment">{formatCurrency(data.monthlyPayment)}</dd>
@@ -83,16 +84,16 @@ export function RepaymentCalculator({ products, rules }: RepaymentCalculatorProp
             <dt>Total repayment</dt>
             <dd>{formatCurrency(data.totalRepayment, { decimals: false })}</dd>
           </div>
-        </Facts>
+        </dl>
         <RepaymentSchedule schedule={data.paymentSchedule} />
       </>
     );
   };
 
   return (
-    <Layout>
+    <div className={layout}>
       <Card id="calculator-form" title="Loan details" subtitle="Your rate depends on the product and your credit score">
-        <Form onSubmit={handleSubmit} noValidate aria-label="Repayment calculator">
+        <form className={form} onSubmit={handleSubmit} noValidate aria-label="Repayment calculator">
           <SelectField
             id="calc-product"
             label="Loan type"
@@ -133,15 +134,15 @@ export function RepaymentCalculator({ products, rules }: RepaymentCalculatorProp
           <Button type="submit" disabled={isLoading}>
             {isLoading ? 'Calculating…' : 'Calculate repayments'}
           </Button>
-        </Form>
+        </form>
       </Card>
-      <ResultColumn>
+      <div className={resultColumn}>
         {/* Hidden once a calculation starts, so the repayments take its place. */}
         {isUninitialized && <LoanProductImage productId={productId} />}
         <Card id="calculator-result" title="Your repayments">
           <div aria-live="polite">{renderResult()}</div>
         </Card>
-      </ResultColumn>
-    </Layout>
+      </div>
+    </div>
   );
 }

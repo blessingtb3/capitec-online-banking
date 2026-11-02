@@ -1,5 +1,5 @@
 import type { CategoryIcon as IconName } from '../../types/spending';
-import { IconBadge } from './CategoryIcon.styles';
+import styles from './CategoryIcon.module.css';
 
 /** Simple line icons for the API's category icon names. */
 const PATHS: Record<IconName, string> = {
@@ -19,11 +19,12 @@ interface CategoryIconProps {
 }
 
 export function CategoryIcon({ icon, color, size = 36 }: CategoryIconProps) {
+  const { iconBadge } = styles;
   return (
-    <IconBadge $size={size} $color={color} aria-hidden="true">
+    <span className={iconBadge} style={{ width: size, height: size, background: color }} aria-hidden="true">
       <svg width={size * 0.55} height={size * 0.55} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
         <path d={PATHS[icon] ?? PATHS['shopping-bag']} />
       </svg>
-    </IconBadge>
+    </span>
   );
 }

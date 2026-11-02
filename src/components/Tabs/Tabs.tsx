@@ -1,6 +1,6 @@
 import type { KeyboardEvent, ReactNode } from 'react';
 import { Icon, type IconName } from '../Icon/Icon';
-import { Panel, Tab, TabList } from './Tabs.styles';
+import styles from './Tabs.module.css';
 
 export interface TabItem<T extends string> {
   id: T;
@@ -20,6 +20,7 @@ interface TabsProps<T extends string> {
 
 /** Accessible tabs: arrow keys, Home and End move between tabs (WAI-ARIA tabs pattern). */
 export function Tabs<T extends string>({ tabs, activeId, onChange, label, idPrefix }: TabsProps<T>) {
+  const { tabList, tabButton, tabButtonActive } = styles;
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     const index = tabs.findIndex((tab) => tab.id === activeId);
     const targets: Record<string, number> = {
@@ -36,11 +37,12 @@ export function Tabs<T extends string>({ tabs, activeId, onChange, label, idPref
   };
 
   return (
-    <TabList role="tablist" aria-label={label} onKeyDown={handleKeyDown}>
+    <div className={tabList} role="tablist" aria-label={label} onKeyDown={handleKeyDown}>
       {tabs.map((tab) => {
         const active = tab.id === activeId;
         return (
-          <Tab
+          <button
+            className={`${tabButton} ${active ? tabButtonActive : ''}`}
             key={tab.id}
             id={`${idPrefix}-tab-${tab.id}`}
             type="button"
@@ -48,15 +50,14 @@ export function Tabs<T extends string>({ tabs, activeId, onChange, label, idPref
             aria-selected={active}
             aria-controls={`${idPrefix}-panel-${tab.id}`}
             tabIndex={active ? 0 : -1}
-            $active={active}
             onClick={() => onChange(tab.id)}
           >
             {tab.icon && <Icon name={tab.icon} />}
             {tab.label}
-          </Tab>
+          </button>
         );
       })}
-    </TabList>
+    </div>
   );
 }
 
@@ -72,8 +73,10 @@ interface TabPanelProps {
  * fetched data survive switching tabs.
  */
 export function TabPanel({ idPrefix, id, activeId, children }: TabPanelProps) {
+  const { panel } = styles;
   return (
-    <Panel
+    <div
+      className={panel}
       id={`${idPrefix}-panel-${id}`}
       role="tabpanel"
       aria-labelledby={`${idPrefix}-tab-${id}`}
@@ -81,6 +84,6 @@ export function TabPanel({ idPrefix, id, activeId, children }: TabPanelProps) {
       tabIndex={0}
     >
       {children}
-    </Panel>
+    </div>
   );
 }

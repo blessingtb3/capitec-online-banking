@@ -3,7 +3,7 @@ import { useGetSpendingSummaryQuery } from '../../../services/spendingApi';
 import type { Period } from '../../../types/spending';
 import { formatChange, formatCurrency } from '../../../utils/format';
 import { getErrorMessage } from '../../../utils/getErrorMessage';
-import { Tile, TileGrid, TileLabel, TileNote, TileValue } from './SummaryTiles.styles';
+import styles from './SummaryTiles.module.css';
 
 interface SummaryTilesProps {
   customerId: string;
@@ -17,6 +17,7 @@ const describeChange = (change: number, noun: string, period: Period) => {
 };
 
 export function SummaryTiles({ customerId, period }: SummaryTilesProps) {
+  const { tileGrid, tile, blue, tileLabel, tileValue, tileNote, navy, slate, red } = styles;
   const { data, isLoading, isError, error, refetch } = useGetSpendingSummaryQuery({ customerId, period });
 
   if (isLoading) return <StatusMessage variant="loading" title="Loading your summary…" />;
@@ -25,27 +26,27 @@ export function SummaryTiles({ customerId, period }: SummaryTilesProps) {
   }
 
   return (
-    <TileGrid aria-label="Spending summary">
-      <Tile $tone="blue">
-        <TileLabel>Total spent</TileLabel>
-        <TileValue>{formatCurrency(data.totalSpent)}</TileValue>
-        <TileNote>{describeChange(data.comparedToPrevious.spentChange, 'spend', period)}</TileNote>
-      </Tile>
-      <Tile $tone="navy">
-        <TileLabel>Transactions</TileLabel>
-        <TileValue>{data.transactionCount}</TileValue>
-        <TileNote>{describeChange(data.comparedToPrevious.transactionChange, 'number', period)}</TileNote>
-      </Tile>
-      <Tile $tone="slate">
-        <TileLabel>Average transaction</TileLabel>
-        <TileValue>{formatCurrency(data.averageTransaction)}</TileValue>
-        <TileNote>per purchase</TileNote>
-      </Tile>
-      <Tile $tone="red">
-        <TileLabel>Top category</TileLabel>
-        <TileValue>{data.topCategory ?? '—'}</TileValue>
-        <TileNote>where most of your money went</TileNote>
-      </Tile>
-    </TileGrid>
+    <section className={tileGrid} aria-label="Spending summary">
+      <div className={`${tile} ${blue}`}>
+        <p className={tileLabel}>Total spent</p>
+        <p className={tileValue}>{formatCurrency(data.totalSpent)}</p>
+        <p className={tileNote}>{describeChange(data.comparedToPrevious.spentChange, 'spend', period)}</p>
+      </div>
+      <div className={`${tile} ${navy}`}>
+        <p className={tileLabel}>Transactions</p>
+        <p className={tileValue}>{data.transactionCount}</p>
+        <p className={tileNote}>{describeChange(data.comparedToPrevious.transactionChange, 'number', period)}</p>
+      </div>
+      <div className={`${tile} ${slate}`}>
+        <p className={tileLabel}>Average transaction</p>
+        <p className={tileValue}>{formatCurrency(data.averageTransaction)}</p>
+        <p className={tileNote}>per purchase</p>
+      </div>
+      <div className={`${tile} ${red}`}>
+        <p className={tileLabel}>Top category</p>
+        <p className={tileValue}>{data.topCategory ?? '—'}</p>
+        <p className={tileNote}>where most of your money went</p>
+      </div>
+    </section>
   );
 }

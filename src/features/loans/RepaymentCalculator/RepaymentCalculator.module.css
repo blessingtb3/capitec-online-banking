@@ -1,0 +1,55 @@
+.layout {
+  display: grid;
+  gap: var(--space-lg);
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .layout {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  }
+}
+
+/* Loan photo with the repayments card underneath. */
+.resultColumn {
+  display: grid;
+  gap: var(--space-lg);
+  align-content: start;
+}
+
+.form {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-sm);
+  margin: 0 0 var(--space-lg);
+}
+
+.facts div {
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-muted);
+}
+
+.facts dt {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-muted);
+}
+
+.facts dd {
+  margin: 2px 0 0;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-heavy);
+  font-variant-numeric: tabular-nums;
+}
+
+.placeholder {
+  padding: var(--space-xl) var(--space-md);
+  text-align: center;
+  color: var(--color-text-muted);
+}

@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { CardHeader, CardSection, CardSubtitle, CardTitle } from './Card.styles';
+import styles from './Card.module.css';
 
 interface CardProps {
   title: string;
@@ -11,17 +11,18 @@ interface CardProps {
 }
 
 export function Card({ title, subtitle, actions, children, id }: CardProps) {
+  const { cardSection, cardHeader, cardTitle, cardSubtitle } = styles;
   const titleId = id ? `${id}-title` : undefined;
   return (
-    <CardSection id={id} aria-labelledby={titleId}>
-      <CardHeader>
+    <section className={cardSection} id={id} aria-labelledby={titleId}>
+      <header className={cardHeader}>
         <div>
-          <CardTitle id={titleId}>{title}</CardTitle>
-          {subtitle && <CardSubtitle>{subtitle}</CardSubtitle>}
+          <h2 className={cardTitle} id={titleId}>{title}</h2>
+          {subtitle && <p className={cardSubtitle}>{subtitle}</p>}
         </div>
         {actions}
-      </CardHeader>
+      </header>
       {children}
-    </CardSection>
+    </section>
   );
 }

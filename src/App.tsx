@@ -7,23 +7,24 @@ import { LoanEstimatorPage } from './pages/LoanEstimatorPage/LoanEstimatorPage';
 import { NotFoundPage } from './pages/NotFoundPage/NotFoundPage';
 import { SpendingInsightsPage } from './pages/SpendingInsightsPage/SpendingInsightsPage';
 import { useGetCustomerProfileQuery } from './services/spendingApi';
-import { Footer, Main } from './App.styles';
+import styles from './App.module.css';
 
 export default function App() {
+  const { main, footer } = styles;
   const { data: profile } = useGetCustomerProfileQuery(CURRENT_CUSTOMER_ID);
 
   return (
     <>
       <Header customerName={profile?.name} navigation={<MainNav />} />
-      <Main>
+      <main className={main}>
         <Routes>
           <Route path="/" element={<Navigate to={ROUTES.spendingInsights} replace />} />
           <Route path={ROUTES.spendingInsights} element={<SpendingInsightsPage customerId={CURRENT_CUSTOMER_ID} />} />
           <Route path={ROUTES.loanEstimator} element={<LoanEstimatorPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
-      </Main>
-      <Footer>Concept project for a job application. All data is mocked; not affiliated with Capitec Bank.</Footer>
+      </main>
+      <footer className={footer}>Concept project for a job application. All data is mocked; not affiliated with Capitec Bank.</footer>
     </>
   );
 }

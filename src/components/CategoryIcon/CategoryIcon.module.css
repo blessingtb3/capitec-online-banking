@@ -1,0 +1,8 @@
+/* The size and colour come from props and API data, so they're set inline by the component. */
+.iconBadge {
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  border-radius: 10px;
+  color: var(--color-text);
+}

@@ -1,4 +1,4 @@
-import { Svg } from './Icon.styles';
+import styles from './Icon.module.css';
 
 /** Simple 24×24 line icons drawn for this app. */
 const ICONS = {
@@ -39,9 +39,11 @@ interface IconProps {
 
 /** Decorative: hidden from screen readers, so the text beside it carries the meaning. */
 export function Icon({ name, size = 20 }: IconProps) {
+  const { svg } = styles;
   return (
-    <Svg
-      $size={size}
+    <svg
+      className={svg}
+      style={{ width: size, height: size }}
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -53,6 +55,6 @@ export function Icon({ name, size = 20 }: IconProps) {
       data-icon={name}
     >
       {ICONS[name]}
-    </Svg>
+    </svg>
   );
 }

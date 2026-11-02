@@ -1,4 +1,6 @@
-import { Fill, Track, type ProgressTone } from './ProgressBar.styles';
+import styles from './ProgressBar.module.css';
+
+export type ProgressTone = 'primary' | 'success' | 'warning' | 'error';
 
 interface ProgressBarProps {
   /** 0–100; values outside are clamped for display. */
@@ -9,9 +11,11 @@ interface ProgressBarProps {
 }
 
 export function ProgressBar({ value, label, tone = 'primary', valueText }: ProgressBarProps) {
+  const { track, fill } = styles;
   const clamped = Math.min(Math.max(value, 0), 100);
   return (
-    <Track
+    <div
+      className={track}
       role="progressbar"
       aria-label={label}
       aria-valuemin={0}
@@ -19,7 +23,7 @@ export function ProgressBar({ value, label, tone = 'primary', valueText }: Progr
       aria-valuenow={Math.round(clamped)}
       aria-valuetext={valueText}
     >
-      <Fill $tone={tone} $percent={clamped} data-tone={tone} />
-    </Track>
+      <div className={fill} style={{ width: `${clamped}%` }} data-tone={tone} />
+    </div>
   );
 }

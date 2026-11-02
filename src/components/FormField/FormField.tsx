@@ -1,5 +1,5 @@
 import type { InputHTMLAttributes, ReactNode, SelectHTMLAttributes } from 'react';
-import { ErrorText, Field, Hint, Input, Label, Select } from './FormField.styles';
+import styles from './FormField.module.css';
 
 interface FieldChrome {
   id: string;
@@ -13,22 +13,25 @@ const describedBy = ({ id, hint, error }: FieldChrome) =>
   [hint && `${id}-hint`, error && `${id}-error`].filter(Boolean).join(' ') || undefined;
 
 function Chrome({ id, label, hint, error, children }: FieldChrome & { children: ReactNode }) {
+  const { field, fieldLabel, fieldHint, errorText } = styles;
   return (
-    <Field>
-      <Label htmlFor={id}>{label}</Label>
-      {hint && <Hint id={`${id}-hint`}>{hint}</Hint>}
+    <div className={field}>
+      <label className={fieldLabel} htmlFor={id}>{label}</label>
+      {hint && <p className={fieldHint} id={`${id}-hint`}>{hint}</p>}
       {children}
-      {error && <ErrorText id={`${id}-error`}>{error}</ErrorText>}
-    </Field>
+      {error && <p className={errorText} id={`${id}-error`}>{error}</p>}
+    </div>
   );
 }
 
 type TextFieldProps = FieldChrome & Omit<InputHTMLAttributes<HTMLInputElement>, 'id'>;
 
 export function TextField({ id, label, hint, error, ...inputProps }: TextFieldProps) {
+  const { input } = styles;
   return (
     <Chrome id={id} label={label} hint={hint} error={error}>
-      <Input
+      <input
+        className={input}
         id={id}
         aria-invalid={error ? true : undefined}
         aria-describedby={describedBy({ id, label, hint, error })}
@@ -45,9 +48,11 @@ type SelectFieldProps = FieldChrome &
   };
 
 export function SelectField({ id, label, hint, error, options, placeholder, ...selectProps }: SelectFieldProps) {
+  const { select } = styles;
   return (
     <Chrome id={id} label={label} hint={hint} error={error}>
-      <Select
+      <select
+        className={select}
         id={id}
         aria-invalid={error ? true : undefined}
         aria-describedby={describedBy({ id, label, hint, error })}
@@ -59,7 +64,7 @@ export function SelectField({ id, label, hint, error, options, placeholder, ...s
             {option.label}
           </option>
         ))}
-      </Select>
+      </select>
     </Chrome>
   );
 }

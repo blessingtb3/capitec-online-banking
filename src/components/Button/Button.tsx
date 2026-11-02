@@ -1,5 +1,8 @@
 import type { ButtonHTMLAttributes } from 'react';
-import { StyledButton, type ButtonSize, type ButtonVariant } from './Button.styles';
+import styles from './Button.module.css';
+
+export type ButtonVariant = 'primary' | 'secondary';
+export type ButtonSize = 'md' | 'sm';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
@@ -7,6 +10,13 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   fullWidth?: boolean;
 }
 
-export function Button({ variant = 'primary', size = 'md', fullWidth = false, type = 'button', ...rest }: ButtonProps) {
-  return <StyledButton type={type} $variant={variant} $size={size} $fullWidth={fullWidth} {...rest} />;
+export function Button({ variant = 'primary', size = 'md', fullWidth = false, type = 'button', className, ...rest }: ButtonProps) {
+  const { button, fullWidthButton } = styles;
+  return (
+    <button
+      type={type}
+      className={`${button} ${styles[variant]} ${styles[size]} ${fullWidth ? fullWidthButton : ''} ${className ?? ''}`}
+      {...rest}
+    />
+  );
 }

@@ -2,7 +2,7 @@ import loanImageUrl from '../../../assets/loan.png';
 import { Button } from '../../../components/Button/Button';
 import type { LoanProduct, LoanProductId } from '../../../types/loans';
 import { formatCurrency, humanise } from '../../../utils/format';
-import { Description, Facts, Illustration, Layout, Name, ProductCard, ProductList, Purposes } from './LoanProducts.styles';
+import styles from './LoanProducts.module.css';
 
 interface LoanProductsProps {
   products: LoanProduct[];
@@ -11,16 +11,26 @@ interface LoanProductsProps {
 
 /** The loan products from GET /api/loans/products. */
 export function LoanProducts({ products, onCheckEligibility }: LoanProductsProps) {
+  const {
+    layout,
+    productList,
+    productCard,
+    productName,
+    productDescription,
+    facts,
+    purposeList,
+    illustration,
+  } = styles;
   return (
-    <Layout>
-      <ProductList>
+    <div className={layout}>
+      <ul className={productList}>
         {products.map((product) => (
-          <ProductCard key={product.id} aria-labelledby={`product-${product.id}`}>
+          <li className={productCard} key={product.id} aria-labelledby={`product-${product.id}`}>
             <div>
-              <Name id={`product-${product.id}`}>{product.name}</Name>
-              <Description>{product.description}</Description>
+              <h2 className={productName} id={`product-${product.id}`}>{product.name}</h2>
+              <p className={productDescription}>{product.description}</p>
             </div>
-            <Facts>
+            <dl className={facts}>
               <div>
                 <dt>Amount</dt>
                 <dd>
@@ -39,22 +49,22 @@ export function LoanProducts({ products, onCheckEligibility }: LoanProductsProps
                   {product.interestRateRange.min}%–{product.interestRateRange.max}%
                 </dd>
               </div>
-            </Facts>
-            <Purposes aria-label={`${product.name} can be used for`}>
+            </dl>
+            <ul className={purposeList} aria-label={`${product.name} can be used for`}>
               {product.purposes.map((purpose) => (
                 <li key={purpose}>{humanise(purpose)}</li>
               ))}
-            </Purposes>
+            </ul>
             <div>
               <Button onClick={() => onCheckEligibility(product.id)} aria-label={`Check eligibility for ${product.name}`}>
                 Check eligibility
               </Button>
             </div>
-          </ProductCard>
+          </li>
         ))}
-      </ProductList>
+      </ul>
       {/* Decorative: alt="" so screen readers skip it. */}
-      <Illustration src={loanImageUrl} alt="" width={667} height={679} />
-    </Layout>
+      <img className={illustration} src={loanImageUrl} alt="" width={667} height={679} />
+    </div>
   );
 }
